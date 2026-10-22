@@ -1,4 +1,10 @@
-<p align="center"><img src="public/icon.png" alt="One More Prompt" width="96" height="96"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-light.svg">
+    <img src="assets/brand/logo-light.svg" alt="One More Prompt" width="96" height="96">
+  </picture>
+</p>
 <h1 align="center">One More Prompt</h1>
 <p align="center"><strong>Codex-Nutzung Verstehen und Die Arbeit Im Blick Behalten.</strong></p>
 <p align="center"><a href="README.md">English</a> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <strong>Deutsch</strong> · <a href="README.fr.md">Français</a></p>
@@ -41,6 +47,8 @@ One More Prompt ist eine lokal ausgerichtete Desktop-App für **Codex-Kontolimit
 - **Windows · x64:** Das unsignierte portable Windows-x64-ZIP herunterladen, den **gesamten Ordner** entpacken und `one-more-prompt.exe` starten. Alle zugehörigen Dateien zusammenhalten.
 
 Windows benötigt [Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/#download-section). SmartScreen oder Unternehmensrichtlinien können vor unsignierten Apps warnen oder sie blockieren. Linux-, Intel-Mac- und native Windows-ARM-Pakete sind nicht enthalten.
+
+Zum Installieren oder Starten der App wird nur das DMG oder ZIP benötigt. [SHA256SUMS.txt](https://github.com/alanchill-dev/one-more-prompt/releases/download/v1.0.0/SHA256SUMS.txt) enthält Hashwerte zur optionalen Prüfung der Download-Integrität; die Datei ist weder ein Installationsprogramm noch eine digitale Signatur.
 
 Mit der üblichen lokalen Codex-Konfiguration anmelden. Vorhandene Einträge werden ohne API-Schlüssel oder manuelles Kopieren von Zugangsdaten gefunden. Der erste Einrichtungsbildschirm bietet alle neun Sprachen oben an; zunächst ist Englisch ausgewählt. Die gespeicherte Sprache lässt sich später in den Einstellungen ändern.
 

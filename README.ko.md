@@ -1,4 +1,10 @@
-<p align="center"><img src="public/icon.png" alt="One More Prompt" width="96" height="96"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-light.svg">
+    <img src="assets/brand/logo-light.svg" alt="One More Prompt" width="96" height="96">
+  </picture>
+</p>
 <h1 align="center">One More Prompt</h1>
 <p align="center"><strong>Codex 사용량과 작업의 흐름을 한눈에.</strong></p>
 <p align="center"><a href="README.md">English</a> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <strong>한국어</strong> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a></p>
@@ -41,6 +47,8 @@ One More Prompt는 **Codex 계정 한도, Token 활동, 프롬프트 기록**을
 - **Windows · x64:** 서명되지 않은 Windows x64 포터블 ZIP을 다운로드하고 **폴더 전체**를 압축 해제한 뒤 `one-more-prompt.exe`를 실행합니다. 지원 파일을 함께 보관하세요.
 
 Windows에는 [Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/#download-section)가 필요합니다. SmartScreen이나 회사 정책이 미서명 앱을 경고하거나 차단할 수 있습니다. Linux, Intel Mac, 네이티브 Windows ARM 패키지는 제공하지 않습니다.
+
+앱을 설치하거나 실행할 때는 DMG 또는 ZIP만 다운로드하면 됩니다. [SHA256SUMS.txt](https://github.com/alanchill-dev/one-more-prompt/releases/download/v1.0.0/SHA256SUMS.txt)에는 다운로드한 파일의 무결성을 선택적으로 확인할 수 있는 해시가 있으며, 설치 프로그램이나 디지털 서명이 아닙니다.
 
 Codex의 표준 로컬 설정으로 로그인하면 기존 기록을 자동으로 찾습니다. API 키나 인증 정보 수동 복사는 필요하지 않습니다. 최초 설정의 첫 화면에서 위의 9개 언어를 선택하며, 처음에는 영어가 선택되어 있습니다. 저장한 언어는 나중에 설정에서 변경할 수 있습니다.
 

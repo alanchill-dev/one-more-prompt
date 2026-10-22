@@ -75,7 +75,24 @@ candidate before publication. Never report an accepted limitation as a test pass
 
 ## Build the Windows ZIP
 
-From the repository root on the local Mac:
+This is a macOS-to-Windows cross-build. Complete the
+[development setup](../CONTRIBUTING.md#development-setup), then install these
+additional tools:
+
+| Required Command(s) | Installation |
+| --- | --- |
+| `cargo-xwin` | Follow [cargo-xwin](https://github.com/rust-cross/cargo-xwin#installation): `cargo install --locked cargo-xwin`. |
+| `clang-cl`, `llvm-rc` | Install [LLVM](https://formulae.brew.sh/formula/llvm): `brew install llvm`. |
+| `lld-link` | Install the separate [LLD formula](https://formulae.brew.sh/formula/lld): `brew install lld`. |
+| `trash` | Follow the [trash installation instructions](https://github.com/ali-rantakari/trash#installing). |
+| `zip`, `unzip`, `shasum` | Use the standard macOS command-line tools; ensure each is available on `PATH`. |
+
+Add Rust's Windows target with `rustup target add x86_64-pc-windows-msvc`.
+The script checks these commands and `bun` before building. It includes the
+standard Bun, Cargo, and Apple Silicon Homebrew LLVM/LLD directories in its
+process-local `PATH`; put tools installed elsewhere on `PATH` before starting.
+
+From the repository root:
 
 ```sh
 bun run build:windows-portable

@@ -4,7 +4,7 @@
 
 Please do not open a public issue for a suspected vulnerability.
 
-Open the repository's **Security** tab and use GitHub private vulnerability reporting when it is available. If it is unavailable, submit a bug report containing only a request for a private reporting channel. Do not include vulnerability details, logs, credentials, or proof-of-concept code in that public request.
+Use [GitHub private vulnerability reporting](https://github.com/alanchill-dev/one-more-prompt/security/advisories/new) to send a report privately to the repository maintainers. You can also find this form in the repository's **Security** tab under **Report a vulnerability**.
 
 Include:
 
