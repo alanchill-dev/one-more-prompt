@@ -1,0 +1,7 @@
+.prompt-session-pin { position: absolute; left: var(--prompt-pin-left, -20px); margin-left: 4px; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 24px; height: 36px; border-radius: 7px; color: var(--muted-foreground); cursor: pointer; transition: color 180ms ease, background-color 180ms ease; }
+.prompt-session-pin:hover { color: var(--wire-orange); background: color-mix(in srgb, var(--wire-orange) 10%, transparent); }
+.prompt-session-pin[aria-pressed="true"] { color: var(--wire-orange); }
+.prompt-session-pin svg { transition: transform 240ms cubic-bezier(.2,.7,.2,1); }
+.prompt-session-pin[aria-pressed="true"] svg { transform: rotate(-16deg) scale(1.08); }
+.prompt-session-pin:active svg { transform: scale(.85); }
+.prompt-session-pin:focus-visible { outline: 2px solid var(--wire-orange); outline-offset: -2px; }

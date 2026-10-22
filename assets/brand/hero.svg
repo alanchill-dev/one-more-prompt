@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2560 1280" role="img" aria-labelledby="title description">
+  <title id="title">One More Prompt product preview</title>
+  <desc id="description">One More Prompt presents Codex account limits, token activity, and local prompt history on macOS and Windows. The current interface uses synthetic demonstration data.</desc>
+  <defs>
+    <radialGradient id="signal" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(312 1112) rotate(-35) scale(820 610)">
+      <stop stop-color="#F5572F" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#F5572F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="screen-edge" x1="980" y1="170" x2="2480" y2="1224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#41454D"/>
+      <stop offset="0.55" stop-color="#24272D"/>
+      <stop offset="1" stop-color="#17191D"/>
+    </linearGradient>
+    <filter id="screen-shadow" x="860" y="70" width="1740" height="1250" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="34" stdDeviation="42" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <clipPath id="screen-clip">
+      <rect x="1000" y="190" width="1460" height="1015" rx="32"/>
+    </clipPath>
+  </defs>
+
+  <rect width="2560" height="1280" fill="#0C0F13"/>
+  <rect width="2560" height="1280" fill="url(#signal)"/>
+  <path d="M0 1106H2560" stroke="#20252C" stroke-width="2"/>
+  <path d="M928 0V1280" stroke="#20252C" stroke-width="2" stroke-dasharray="8 18"/>
+
+  <g transform="translate(118 86)">
+    <path d="M62.7 23.8A45 45 0 1 0 62.7 66.2" fill="none" stroke="#F4F5F2" stroke-width="10" stroke-linecap="round"/>
+    <path d="M54.7 37.3L64 45 54.7 52.7" fill="none" stroke="#F5572F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="92" y="44" fill="#F4F5F2" font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="34" font-weight="720">One More Prompt</text>
+    <text x="94" y="72" fill="#8E98A7" font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="5">FOR CODEX</text>
+  </g>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif">
+    <text x="118" y="330" fill="#F5F6F3" font-size="92" font-weight="760" letter-spacing="-3">
+      <tspan x="118" dy="0">Know before</tspan>
+      <tspan x="118" dy="104">the next prompt.</tspan>
+    </text>
+    <text x="122" y="520" fill="#909AAA" font-size="31" font-weight="450">
+      <tspan x="122" dy="0">Codex limits, token activity, and local</tspan>
+      <tspan x="122" dy="48">prompt history — one focused workspace.</tspan>
+    </text>
+
+    <g transform="translate(122 650)" font-size="26" font-weight="600" fill="#DDE1E7">
+      <circle cx="8" cy="-8" r="8" fill="#F5572F"/>
+      <text x="34" y="0">Live account limits</text>
+      <circle cx="8" cy="58" r="8" fill="#E89B47"/>
+      <text x="34" y="66">Local token activity</text>
+      <circle cx="8" cy="124" r="8" fill="#F4F5F2"/>
+      <text x="34" y="132">Private prompt history</text>
+    </g>
+
+    <g transform="translate(118 920)">
+      <rect width="462" height="64" rx="14" fill="#161B21" stroke="#343B45" stroke-width="2"/>
+      <text x="28" y="41" fill="#AAB3C0" font-size="20" font-weight="700" letter-spacing="2.4">macOS  ·  WINDOWS</text>
+    </g>
+    <text x="122" y="1042" fill="#6F7988" font-size="20" font-weight="650" letter-spacing="1.8">LOCAL-FIRST · NO INSTALL TELEMETRY</text>
+  </g>
+
+  <g filter="url(#screen-shadow)">
+    <rect x="980" y="170" width="1500" height="1055" rx="42" fill="url(#screen-edge)"/>
+    <rect x="994" y="184" width="1472" height="1027" rx="34" fill="#171817" stroke="#525760" stroke-width="2"/>
+    <image x="1000" y="190" width="1460" height="1015" xlink:href="overview-demo.png" preserveAspectRatio="xMidYMid meet" clip-path="url(#screen-clip)"/>
+  </g>
+
+  <g transform="translate(2242 104)" font-family="-apple-system, BlinkMacSystemFont, Arial, sans-serif">
+    <rect width="210" height="44" rx="12" fill="#0F1216" fill-opacity="0.92" stroke="#3C424B"/>
+    <circle cx="24" cy="22" r="5" fill="#F5572F"/>
+    <text x="42" y="29" fill="#C9CFD8" font-size="16" font-weight="720" letter-spacing="1.8">SAMPLE DATA</text>
+  </g>
+</svg>

@@ -1,0 +1,44 @@
+One More Prompt
+
+Copyright (c) 2026 Alan Chou
+
+One More Prompt is an independently maintained, Codex-only fork of UsagePal
+(https://github.com/Halloweedev/usagepal), Copyright (c) 2026 Nicolas Demanez,
+distributed under the MIT License.
+
+UsagePal is itself a fork of OpenUsage
+(https://github.com/robinebers/openusage), Copyright (c) 2026 Robin Ebers,
+distributed under the MIT License.
+
+The relevant upstream copyright notices and MIT licensing are preserved in
+LICENSE and this NOTICE. One More Prompt is not
+affiliated with, endorsed by, or an official product of OpenAI, UsagePal, or
+OpenUsage.
+
+Vendored auto-launch 0.5.0
+Source: https://github.com/zzzgydi/auto-launch
+The local copy backports Windows command-line quoting and macOS LaunchAgent
+XML escaping. Source provenance and patch scope are recorded in
+src-tauri/vendor/auto-launch/VENDORING.md.
+
+MIT License
+
+Copyright (c) 2022 zzzgydi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

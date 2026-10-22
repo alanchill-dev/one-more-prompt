@@ -1,0 +1,104 @@
+/* The date picker keeps one painted frame throughout the source morph.
+   Content fades at its final geometry; its border and shadow are never clipped. */
+.usage-trend-date-picker-layer .shared-element-morph-shell {
+  box-shadow: 0 18px 45px -24px rgba(0, 0, 0, .75);
+  will-change: left, top, width, height, border-radius;
+}
+
+.usage-trend-date-picker-layer .shared-element-morph-shell[data-state="open"] {
+  animation: date-picker-frame-open 470ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.usage-trend-date-picker-layer .shared-element-morph-shell[data-state="closed"] {
+  animation: date-picker-frame-close 320ms cubic-bezier(.4, 0, .25, 1) both;
+}
+
+.usage-trend-date-picker-layer .usage-trend-date-picker-card {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  clip-path: none;
+  will-change: opacity;
+}
+
+.usage-trend-date-picker-layer .usage-trend-date-picker-card[data-state="open"] {
+  animation: date-picker-content-open 470ms linear both;
+}
+
+.usage-trend-date-picker-layer .usage-trend-date-picker-card[data-state="closed"] {
+  animation: date-picker-content-close 320ms linear both;
+}
+
+.usage-trend-date-picker-layer .shared-element-morph-shell[data-state="open"] .shared-element-morph-source-visual {
+  animation: date-picker-source-open 470ms linear both;
+}
+
+.usage-trend-date-picker-layer .shared-element-morph-shell[data-state="closed"] .shared-element-morph-source-visual {
+  animation: date-picker-source-close 320ms linear both;
+}
+
+@keyframes date-picker-frame-open {
+  from {
+    left: var(--shared-source-left);
+    top: var(--shared-source-top);
+    width: var(--shared-source-width);
+    height: var(--shared-source-height);
+    border-radius: var(--shared-source-radius);
+    border-color: var(--shared-source-border);
+    background: var(--shared-source-background);
+    box-shadow: none;
+  }
+  to {
+    left: var(--shared-destination-left);
+    top: var(--shared-destination-top);
+    width: var(--shared-destination-width);
+    height: var(--shared-destination-height);
+    border-radius: var(--shared-destination-radius);
+    border-color: var(--shared-destination-border);
+    background: var(--shared-destination-background);
+    box-shadow: 0 18px 45px -24px rgba(0, 0, 0, .75);
+  }
+}
+
+@keyframes date-picker-frame-close {
+  0%, 18% {
+    left: var(--shared-destination-left);
+    top: var(--shared-destination-top);
+    width: var(--shared-destination-width);
+    height: var(--shared-destination-height);
+    border-radius: var(--shared-destination-radius);
+    border-color: var(--shared-destination-border);
+    background: var(--shared-destination-background);
+    box-shadow: 0 18px 45px -24px rgba(0, 0, 0, .75);
+  }
+  100% {
+    left: var(--shared-source-left);
+    top: var(--shared-source-top);
+    width: var(--shared-source-width);
+    height: var(--shared-source-height);
+    border-radius: var(--shared-source-radius);
+    border-color: var(--shared-source-border);
+    background: var(--shared-source-background);
+    box-shadow: none;
+  }
+}
+
+@keyframes date-picker-content-open {
+  0%, 52% { opacity: 0; }
+  90%, 100% { opacity: 1; }
+}
+
+@keyframes date-picker-content-close {
+  0% { opacity: 1; }
+  18%, 100% { opacity: 0; }
+}
+
+@keyframes date-picker-source-open {
+  0% { opacity: 1; }
+  20%, 100% { opacity: 0; }
+}
+
+@keyframes date-picker-source-close {
+  0%, 75% { opacity: 0; }
+  100% { opacity: 1; }
+}

@@ -1,0 +1,60 @@
+{
+  "daily": [
+    {
+      "cachedInputTokens": 30,
+      "costUSD": 0.0013352499999999998,
+      "date": "2026-07-10",
+      "inputTokens": 120,
+      "models": {
+        "gpt-5.3-codex": {
+          "cachedInputTokens": 30,
+          "inputTokens": 120,
+          "isFallback": false,
+          "outputTokens": 80,
+          "reasoningOutputTokens": 8,
+          "totalTokens": 268,
+          "cacheWriteInputTokens": null,
+          "cacheWriteInputTokensComplete": false
+        }
+      },
+      "outputTokens": 80,
+      "reasoningOutputTokens": 8,
+      "totalTokens": 268,
+      "cacheWriteInputTokens": null,
+      "cacheWriteInputTokensComplete": false
+    },
+    {
+      "cachedInputTokens": 0,
+      "costUSD": 0.00030000000000000003,
+      "date": "2026-07-11",
+      "inputTokens": 80,
+      "models": {
+        "gpt-5": {
+          "cachedInputTokens": 0,
+          "inputTokens": 80,
+          "isFallback": true,
+          "outputTokens": 20,
+          "reasoningOutputTokens": 0,
+          "totalTokens": 100,
+          "cacheWriteInputTokens": null,
+          "cacheWriteInputTokensComplete": false
+        }
+      },
+      "outputTokens": 20,
+      "reasoningOutputTokens": 0,
+      "totalTokens": 100,
+      "cacheWriteInputTokens": null,
+      "cacheWriteInputTokensComplete": false
+    }
+  ],
+  "totals": {
+    "cachedInputTokens": 30,
+    "costUSD": 0.00163525,
+    "inputTokens": 200,
+    "outputTokens": 100,
+    "reasoningOutputTokens": 8,
+    "totalTokens": 368,
+    "cacheWriteInputTokens": null,
+    "cacheWriteInputTokensComplete": false
+  }
+}

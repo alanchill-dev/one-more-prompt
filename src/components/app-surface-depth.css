@@ -1,0 +1,204 @@
+:root {
+  --surface-header: var(--app-main-gradient);
+  --surface-toolbar: var(--card);
+  --surface-navigation: var(--card);
+  --surface-workspace: var(--card);
+  --surface-inspector: var(--card);
+  --surface-help: var(--popover);
+}
+
+:root.dark {
+  --surface-header: #18191b;
+  --surface-toolbar: #1f2024;
+  --surface-navigation: #191a1d;
+  --surface-workspace: #242529;
+  --surface-inspector: #202125;
+  --surface-help: #303238;
+}
+
+.prompt-project-surface {
+  --surface-project-summary: var(--surface-workspace);
+  --surface-session-summary: color-mix(in srgb, var(--foreground) 5%, var(--surface-workspace));
+  --surface-prompt-separator: var(--surface-project-summary);
+  --surface-scope-accent: var(--wire-orange);
+  --project-selected-session: color-mix(in srgb, var(--wire-orange) 12%, var(--card));
+  --project-selected-prompt: color-mix(in srgb, var(--wire-orange) 9%, var(--card));
+  --project-folder-selected: var(--muted);
+}
+
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="hierarchy"],
+.dark .prompt-project-surface {
+  --surface-toolbar: #34322f;
+  --surface-navigation: #2c2b29;
+  --surface-project-summary: #242321;
+  --surface-session-summary: #282624;
+  --surface-prompt-separator: #55514b;
+  --surface-workspace: #363432;
+  --surface-inspector: #41403d;
+  --surface-help: #57534e;
+  --surface-scope-accent: #f5572f;
+  --card: var(--surface-inspector);
+  --card-foreground: #fff;
+  --popover: var(--surface-help);
+  --popover-foreground: #fff;
+  --foreground: #fff;
+  --muted-foreground: #d8d2ca;
+  --border: rgb(244 236 224 / .17);
+  --muted: var(--surface-project-summary);
+  --accent: var(--surface-project-summary);
+  --project-selected-session: #493024;
+  --project-selected-prompt: #52382a;
+  --project-folder-selected: color-mix(in srgb, var(--surface-navigation) 75%, var(--foreground));
+}
+
+/* Timeline shares the Project family while keeping distinct chart and identity planes. */
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] {
+  --surface-toolbar: #34322f;
+  --surface-navigation: #2c2b29;
+  --surface-workspace: #363432;
+  --surface-inspector: #41403d;
+  --surface-help: #57534e;
+  --surface-timeline-track: #282624;
+  --surface-timeline-grid-major: rgb(250 246 239 / .12);
+  --surface-timeline-grid-minor: rgb(250 246 239 / .06);
+  --foreground: #fff;
+  --muted-foreground: #d8d2ca;
+  --card: var(--surface-inspector);
+  --card-foreground: #fff;
+  --background: var(--surface-timeline-track);
+  --muted: var(--surface-timeline-track);
+  --popover: var(--surface-help);
+  --popover-foreground: #fff;
+  --border: rgb(250 246 239 / .17);
+  --wire-orange: #f5572f;
+  color: var(--foreground);
+}
+
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-timeline-filter-strip { background: var(--surface-toolbar); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-navigation { background: var(--surface-navigation); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-navigation-map { background: var(--surface-timeline-track); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] :is(.prompt-session-chart-viewport, .prompt-session-lanes-scroll) { background: var(--surface-workspace); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-axis { background: var(--surface-inspector); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-axis::before { background: var(--surface-navigation); }
+/* Paint the full-height identity rail without changing the axis label's layout. */
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-axis::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--lane-label-width) + 24px);
+  z-index: -1;
+  background: var(--surface-navigation);
+  pointer-events: none;
+}
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-lane { background: var(--surface-navigation); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-lane::before {
+  content: "";
+  position: absolute;
+  inset: 0 100% 0 -20px;
+  background: var(--surface-navigation);
+  pointer-events: none;
+}
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-lane::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 24px;
+  background: var(--surface-workspace);
+  pointer-events: none;
+}
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-lane > .prompt-session-track { background: var(--surface-workspace); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] :is(.prompt-session-grid i, .prompt-session-baseline) { background: var(--surface-timeline-grid-major); }
+.dark .app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"] .prompt-session-grid i[data-minor] { background: var(--surface-timeline-grid-minor); }
+
+/* Portaled explanations keep the active Project palette without changing other pages. */
+:root.dark:has(.app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="hierarchy"]) :is(.prompt-help-frame, .prompt-summary-detail-popup, .prompt-summary-info-popup) {
+  --surface-help: #57534e;
+  --card: #41403d;
+  --popover: #57534e;
+  --popover-foreground: #fff;
+  --foreground: #fff;
+  --muted-foreground: #d8d2ca;
+}
+
+/* Portal colors follow Timeline only while that view is active. */
+:root.dark:has(.app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="timeline"]) :is(.prompt-help-frame, .prompt-timeline-filter-popup, .usage-trend-date-picker-layer, .cost-explanation) {
+  --surface-help: #57534e;
+  --card: #57534e;
+  --card-foreground: #fff;
+  --popover: #57534e;
+  --popover-foreground: #fff;
+  --foreground: #fff;
+  --muted-foreground: #d8d2ca;
+  --background: #282624;
+  --muted: #282624;
+  --border: rgb(250 246 239 / .17);
+  --wire-orange: #f5572f;
+  color: var(--foreground);
+}
+
+.app-main-surface { --workspace-gutter: 12px; }
+.dark .app-main-surface { background: var(--surface-workspace); }
+.dark .app-main-surface[data-active-view="home"] { background: var(--surface-header); }
+.app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="hierarchy"] { --workspace-gutter: 0px; }
+.prompt-workspace-filters {
+  margin: 0;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-toolbar);
+}
+.prompt-timeline-filter-strip { background: var(--surface-toolbar); }
+.prompt-project-surface [data-testid="prompt-usage-navigation"] { background: var(--surface-workspace); }
+.prompt-project-surface [data-testid="prompt-usage-scope-column"] { background: var(--surface-navigation); }
+.prompt-project-surface [data-testid="prompt-usage-scope-column"] > .sticky { background: inherit; }
+.prompt-project-surface [data-column="prompts"] { background: var(--surface-workspace); }
+.prompt-project-surface .prompt-project-entry { position: relative; border-radius: 4px; font-size: 13px; box-shadow: none; }
+.prompt-project-surface .prompt-project-entry[aria-current="page"][data-kind="project"] { background: var(--project-folder-selected); color: var(--foreground); }
+.prompt-project-surface .prompt-project-entry[aria-current="page"][data-kind="standalone"],
+.prompt-project-surface .prompt-project-session[aria-current="page"] { background: var(--project-selected-session); color: var(--foreground); }
+.prompt-project-surface .prompt-project-entry[aria-current="page"][data-kind="standalone"]::before {
+  content: "";
+  position: absolute;
+  inset-block: 8px;
+  left: 0;
+  width: 1px;
+  background: var(--wire-orange);
+}
+.prompt-project-surface .prompt-project-session { border-radius: 4px; }
+.prompt-project-surface .prompt-project-session[aria-current="page"]::before { width: 1px; }
+.prompt-project-surface .prompt-project-session-title { font-size: 13px; line-height: 20px; }
+.prompt-project-surface .prompt-project-session-metadata { font-size: 11px; line-height: 16px; }
+.prompt-project-list-heading {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  margin: 0;
+  padding: 5px 16px;
+  border-block: 1px solid var(--border);
+  background: var(--surface-prompt-separator, var(--surface-workspace));
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+}
+.prompt-project-list-heading > :first-child { color: var(--foreground); font-weight: 500; }
+.prompt-project-surface .prompt-project-prompt-button { position: relative; }
+.prompt-project-surface .prompt-project-prompt-button[data-selected="true"] { background: var(--project-selected-prompt); }
+.prompt-project-surface .prompt-project-prompt-button[data-selected="true"]::before {
+  content: "";
+  position: absolute;
+  inset-block: 12px;
+  left: 0;
+  width: 1px;
+  background: var(--wire-orange);
+}
+.prompt-project-surface .prompt-project-prompt-metadata { font-size: 12px; line-height: 18px; }
+.prompt-project-surface .prompt-project-prompt-title { font-size: 14px; line-height: 22px; font-weight: 400; }
+.prompt-project-surface .prompt-project-prompt-total { font-weight: 500; line-height: 22px; }
+[data-column="details"][data-layout="right-inspector"] { background: var(--surface-inspector); }
+.prompt-reader-overlay { background: var(--surface-inspector); }
+
+@media (min-width: 640px) {
+  .app-main-surface { --workspace-gutter: 16px; }
+}

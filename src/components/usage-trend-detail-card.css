@@ -1,0 +1,155 @@
+.trend-detail-action {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  min-height: 110px;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--foreground) 24%, var(--border));
+  border-radius: 11px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent), 0 3px 8px #00000015;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  transition: transform 220ms cubic-bezier(.2, 0, 0, 1), box-shadow 220ms, border-color 220ms;
+}
+
+.trend-detail-action::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: radial-gradient(85px circle at var(--workspace-x, 50%) var(--workspace-y, 0%), color-mix(in srgb, var(--foreground) 62%, transparent), transparent) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms;
+}
+
+.trend-workspace-content { display: flex; flex-direction: column; width: 100%; min-width: 0; flex: 1; }
+.trend-workspace-heading {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--foreground) 4%, var(--popover));
+}
+.trend-detail-action-icon { width: 15px; height: 15px; flex-shrink: 0; }
+.trend-detail-action-label { font-size: 13px; font-weight: 700; line-height: 1.35; min-width: 0; overflow-wrap: anywhere; }
+.trend-detail-action-arrow {
+  width: 12px;
+  height: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
+  opacity: .65;
+  transition: opacity 180ms;
+}
+.trend-workspace-scene {
+  position: relative;
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 72px;
+  padding: 11px 10px;
+  background: color-mix(in srgb, var(--background) 70%, var(--popover));
+}
+.trend-workspace-depth {
+  position: relative;
+  display: flex;
+  gap: 5px;
+  height: 49px;
+  transform: translate(var(--workspace-dx, 0px), var(--workspace-dy, 0px));
+  transition: transform 180ms ease-out;
+}
+.trend-workspace-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  padding: 7px 4px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 16%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--foreground) 6%, var(--popover));
+  transform: translateY(3px);
+  transition: transform 320ms cubic-bezier(.2, 0, 0, 1), border-color 250ms, background-color 250ms;
+}
+.trend-workspace-column:nth-child(2) { flex: 1.2; transition-delay: 35ms; }
+.trend-workspace-column:nth-child(3) { flex: 1.4; transition-delay: 70ms; }
+.trend-workspace-column i, .trend-workspace-event i {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--foreground) 23%, transparent);
+  transition: background-color 260ms, transform 260ms;
+}
+.trend-workspace-column i:first-child { width: 60%; background: color-mix(in srgb, var(--trend-hero) 65%, var(--foreground)); }
+.trend-workspace-column i:last-child { width: 70%; }
+.trend-workspace-timeline .trend-workspace-depth { flex-direction: column; gap: 7px; padding-left: 18px; }
+.trend-workspace-timeline .trend-workspace-depth::before,
+.trend-workspace-timeline .trend-workspace-depth::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 5px;
+  width: 1px;
+  height: 37px;
+  background: color-mix(in srgb, var(--foreground) 20%, transparent);
+}
+.trend-workspace-timeline .trend-workspace-depth::after {
+  background: var(--trend-hero);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 420ms cubic-bezier(.2, 0, .2, 1);
+}
+.trend-workspace-event { position: relative; display: flex; flex-direction: column; gap: 3px; }
+.trend-workspace-event::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 1px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--foreground) 45%, var(--popover));
+  background: var(--popover);
+  transition: background-color 220ms, box-shadow 220ms, transform 220ms;
+}
+.trend-workspace-event:nth-child(2)::before { transition-delay: 100ms; }
+.trend-workspace-event:nth-child(3)::before { transition-delay: 200ms; }
+.trend-workspace-event i:first-child { width: 72%; }
+.trend-workspace-event:nth-child(2) i:first-child { width: 90%; }
+.trend-workspace-event i:nth-child(2) { width: 42%; opacity: .5; }
+.trend-workspace-event i:last-child { display: none; }
+
+.trend-detail-action:focus-visible { outline: 2px solid var(--foreground); outline-offset: 3px; }
+.trend-detail-action:focus-visible,
+.trend-detail-action[data-workspace-hover] {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--foreground) 45%, var(--border));
+  box-shadow: 0 8px 18px #00000022;
+}
+.trend-detail-action:is(:focus-visible, [data-workspace-hover])::after { opacity: 1; }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-detail-action-arrow { opacity: 1; }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-workspace-column { transform: translateY(0); border-color: color-mix(in srgb, var(--foreground) 32%, transparent); }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-workspace-column:first-child { transform: translate(-2px, -1px); }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-workspace-column:last-child { transform: translate(2px, -2px); }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-workspace-column i { background-color: color-mix(in srgb, var(--foreground) 45%, transparent); }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-workspace-timeline .trend-workspace-depth::after { transform: scaleY(1); }
+.trend-detail-action:is(:focus-visible, [data-workspace-hover]) .trend-workspace-event::before {
+  background: var(--trend-hero);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--trend-hero) 12%, transparent);
+  transform: scale(1.12);
+}
+.trend-detail-action:active { transform: translateY(1px) scale(.98); transition-duration: 90ms; }

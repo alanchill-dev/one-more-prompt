@@ -1,0 +1,41 @@
+function sRGBtoLinear(c: number) {
+  return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+}
+
+export function getRelativeLuminance(hex: string): number {
+  let h = hex.startsWith("#") ? hex.slice(1) : hex
+  if (h.length === 3 || h.length === 4) {
+    h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2]
+  } else if (h.length === 8) {
+    h = h.slice(0, 6)
+  }
+  if (h.length !== 6 || !/^[0-9a-fA-F]{6}$/.test(h)) return 0
+  const r = parseInt(h.slice(0, 2), 16) / 255
+  const g = parseInt(h.slice(2, 4), 16) / 255
+  const b = parseInt(h.slice(4, 6), 16) / 255
+  return 0.2126 * sRGBtoLinear(r) + 0.7152 * sRGBtoLinear(g) + 0.0722 * sRGBtoLinear(b)
+}
+
+/** Brand color for a provider icon, guarded against vanishing into the theme
+ * background: near-black brands flip to white in dark mode, near-white brands
+ * fall back to the current text color in light mode. */
+export function getProviderIconColor(brandColor: string | undefined, isDark: boolean): string {
+  if (!brandColor) return "currentColor"
+  const luminance = getRelativeLuminance(brandColor)
+  if (isDark && luminance < 0.15) return "#ffffff"
+  if (!isDark && luminance > 0.85) return "currentColor"
+  return brandColor
+}
+
+/** Color for progress bars, sparkline bars and share-card bars, guarded the
+ * same way as {@link getProviderIconColor}: near-black line colors (Cursor,
+ * OpenCode Go, …) would vanish into dark backgrounds, so they flip to white in
+ * dark mode; near-white colors fall back to the surrounding text color in
+ * light mode. Returns `undefined` when the caller's default should be used. */
+export function getAdaptiveBarColor(color: string | null | undefined, isDark: boolean): string | undefined {
+  if (!color) return undefined
+  const luminance = getRelativeLuminance(color)
+  if (isDark && luminance < 0.15) return "#ffffff"
+  if (!isDark && luminance > 0.85) return undefined
+  return color
+}

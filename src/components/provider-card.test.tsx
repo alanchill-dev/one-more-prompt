@@ -1,0 +1,1251 @@
+import { act, fireEvent, render, screen, within } from "@testing-library/react"
+import type { ReactNode } from "react"
+import userEvent from "@testing-library/user-event"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { openUrl } from "@tauri-apps/plugin-opener"
+import { ProviderCard } from "@/components/provider-card"
+import { groupLinesByType } from "@/lib/group-lines-by-type"
+import { formatResetTooltipText } from "@/lib/reset-tooltip"
+import { REFRESH_COOLDOWN_MS } from "@/lib/settings"
+import { formatFixedPrecisionNumber } from "@/lib/utils"
+import { useAppPreferencesStore } from "@/stores/app-preferences-store"
+
+vi.mock("@tauri-apps/plugin-opener", () => ({
+  openUrl: vi.fn(() => Promise.resolve()),
+}))
+
+vi.mock("@/hooks/use-exchange-rates", () => ({ useExchangeRates: () => ({ rates: [
+  { code: "USD", rate: 1, status: "base", date: null, source: "USD Base" },
+  { code: "TWD", rate: 32, status: "fresh", date: "2026-10-20", source: "Fixture" },
+  { code: "EUR", rate: 2, status: "fresh", date: "2026-10-20", source: "Fixture" },
+] }) }))
+
+vi.mock("@/components/ui/tooltip", () => ({
+  Tooltip: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  TooltipTrigger: ({
+    children,
+    render,
+    ...props
+  }: {
+    children: ReactNode
+    render?: ((props: Record<string, unknown>) => ReactNode) | ReactNode
+  }) => {
+    if (typeof render === "function") {
+      return render({ ...props, children })
+    }
+    if (render) return render
+    return <div {...props}>{children}</div>
+  },
+  TooltipContent: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+}))
+
+function formatMonthDay(date: Date): string {
+  return new Intl.DateTimeFormat(undefined, {
+    month: "short",
+    day: "numeric",
+  }).format(date)
+}
+
+describe("ProviderCard", () => {
+  beforeEach(() => {
+    vi.useRealTimers()
+    vi.mocked(openUrl).mockClear()
+    useAppPreferencesStore.getState().resetState()
+  })
+
+  afterEach(() => {
+    document.documentElement.classList.remove("dark")
+  })
+
+  it("renders error state with retry", async () => {
+    const onRetry = vi.fn()
+    render(
+      <ProviderCard
+        name="Test"
+        displayMode="used"
+        error="Nope"
+        onRetry={onRetry}
+      />
+    )
+    expect(screen.getByText("Nope")).toBeInTheDocument()
+    await userEvent.click(screen.getByRole("button", { name: "Retry" }))
+    expect(onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  it("localizes the complete quota presentation from the selected app language", () => {
+    useAppPreferencesStore.getState().setLanguage("zh-TW")
+    const now = Date.now()
+    render(
+      <ProviderCard
+        name="Codex"
+        displayMode="left"
+        presentation="quota-grid"
+        links={[
+          { label: "Status", url: "https://status.openai.com" },
+          { label: "Usage Dashboard", url: "https://chatgpt.com/codex/settings/usage" },
+        ]}
+        lines={[
+          {
+            type: "progress",
+            label: "Weekly",
+            used: 80,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: new Date(now + 12 * 60 * 60 * 1000).toISOString(),
+            periodDurationMs: 24 * 60 * 60 * 1000,
+          },
+          { type: "text", label: "Rate Limit Resets", value: "1 available" },
+          { type: "text", label: "Credits", value: "$119.40 · 2985 credits" },
+        ]}
+      />,
+    )
+
+    const statusLink = screen.getByRole("link", { name: "OpenAI 服務狀態" })
+    const usageLink = screen.getByRole("link", { name: "Codex 官方用量" })
+    expect(statusLink).toHaveClass("quota-resource-link", "h-10", "rounded-[9px]", "border")
+    expect(usageLink).toHaveClass("quota-resource-link", "h-10", "rounded-[9px]", "border")
+    expect(statusLink).toHaveAttribute("data-resource-link", "Status")
+    expect(usageLink).toHaveAttribute("data-resource-link", "Usage Dashboard")
+    expect(screen.getByText("每週額度")).toBeInTheDocument()
+    expect(screen.getByText("額度重置次數")).toBeInTheDocument()
+    expect(screen.getByText("可用 1 次")).toBeInTheDocument()
+    expect(screen.getByText("$119.4 USD · 2985 點")).toBeInTheDocument()
+    expect(screen.queryByText("預期用量進度")).not.toBeInTheDocument()
+    expect(screen.queryByText(/本週期已經過/)).not.toBeInTheDocument()
+    expect(screen.queryByText("Expected pace")).not.toBeInTheDocument()
+    expect(screen.queryByText("1 available")).not.toBeInTheDocument()
+  })
+
+  it("converts Credits to the selected currency while retaining the source amount and credit count", () => {
+    useAppPreferencesStore.setState({ language: "en", displayCurrency: "TWD" })
+    const credits = { type: "text" as const, label: "Credits", value: "$12.40 · 310 credits" }
+    render(<ProviderCard name="Codex" displayMode="left" presentation="quota-grid" lines={[credits]} />)
+    const amount = screen.getByText("NT$396.8 TWD · 310 credits")
+    expect(amount).toHaveAttribute("title", "NT$396.8 TWD · 310 credits")
+    expect(credits.value).toBe("$12.40 · 310 credits")
+
+    act(() => useAppPreferencesStore.setState({ displayCurrency: "EUR" }))
+    expect(screen.getByText("€24.8 EUR · 310 credits")).toBeInTheDocument()
+    act(() => useAppPreferencesStore.setState({ displayCurrency: "GBP" }))
+    expect(screen.getByText("Exchange Rate Unavailable · 310 credits")).toBeInTheDocument()
+    expect(screen.queryByText(/£|GBP/)).not.toBeInTheDocument()
+    expect(credits.value).toBe("$12.40 · 310 credits")
+  })
+
+  it("does not add onboarding tip cards for stale provider errors", () => {
+    render(
+      <ProviderCard
+        name="Test"
+        displayMode="used"
+        error="Please sign in"
+        lines={[{ type: "text", label: "Session", value: "90%" }]}
+      />
+    )
+
+    expect(screen.queryByRole("note", { name: "Fix Provider Access" })).not.toBeInTheDocument()
+  })
+
+  it("renders loading skeleton", () => {
+    render(
+      <ProviderCard
+        name="Test"
+        displayMode="used"
+        loading
+        skeletonLines={[
+          { type: "text", label: "One", scope: "overview" },
+          { type: "badge", label: "Two", scope: "overview" },
+        ]}
+      />
+    )
+    expect(screen.getByText("One")).toBeInTheDocument()
+    expect(screen.getByText("Two")).toBeInTheDocument()
+  })
+
+  it("shows loading spinner when retry is enabled", () => {
+    const { container } = render(
+      <ProviderCard
+        name="Loading"
+        displayMode="used"
+        loading
+        onRetry={() => {}}
+      />
+    )
+    expect(container.querySelector("svg.animate-spin")).toBeTruthy()
+  })
+
+  it("renders metric lines + progress formats", () => {
+    render(
+      <ProviderCard
+        name="Metrics"
+        displayMode="used"
+        lines={[
+          { type: "text", label: "Label", value: "Value" },
+          { type: "badge", label: "Plan", text: "Pro" },
+          { type: "progress", label: "Percent", used: 32.4, limit: 100, format: { kind: "percent" } },
+          { type: "progress", label: "Dollars", used: 12.34, limit: 100, format: { kind: "dollars" } },
+          { type: "progress", label: "Credits", used: 342, limit: 1000, format: { kind: "count", suffix: "credits" } },
+          { type: "unknown", label: "Ignored" } as any,
+        ]}
+      />
+    )
+    expect(screen.getByText("Label")).toBeInTheDocument()
+    expect(screen.getByText("Pro")).toBeInTheDocument()
+    expect(screen.getByText("32%")).toBeInTheDocument()
+    expect(screen.getByText("$12.34")).toBeInTheDocument()
+    expect(screen.getByText("342 credits")).toBeInTheDocument()
+  })
+
+  it("flips near-black line colors to white in dark mode so bars stay visible", () => {
+    document.documentElement.classList.add("dark")
+    render(
+      <ProviderCard
+        name="Cursor"
+        displayMode="used"
+        lines={[
+          { type: "progress", label: "Usage", used: 40, limit: 100, format: { kind: "percent" }, color: "#000000" },
+          { type: "barChart", label: "Usage Trend", color: "#000000", points: [{ label: "7/1", value: 10 }] },
+        ]}
+      />
+    )
+
+    const indicator = screen.getByRole("progressbar").firstElementChild
+    expect(indicator).toHaveStyle({ backgroundColor: "#ffffff" })
+
+    const sparkBars = screen.getByRole("button", { name: /Usage Trend/ }).querySelectorAll(".bg-primary")
+    expect(sparkBars.length).toBeGreaterThan(0)
+    expect(sparkBars[0]).toHaveStyle({ backgroundColor: "#ffffff" })
+  })
+
+  it("keeps near-black line colors in light mode", () => {
+    render(
+      <ProviderCard
+        name="Cursor"
+        displayMode="used"
+        lines={[
+          { type: "progress", label: "Usage", used: 40, limit: 100, format: { kind: "percent" }, color: "#000000" },
+        ]}
+      />
+    )
+
+    const indicator = screen.getByRole("progressbar").firstElementChild
+    expect(indicator).toHaveStyle({ backgroundColor: "#000000" })
+  })
+
+  it("renders quick links and opens URL", async () => {
+    render(
+      <ProviderCard
+        name="Links"
+        displayMode="used"
+        links={[
+          { label: "Status", url: "https://status.example.com" },
+          { label: "Billing", url: "https://example.com/billing" },
+        ]}
+      />
+    )
+
+    await userEvent.click(screen.getByRole("link", { name: /status/i }))
+    expect(openUrl).toHaveBeenCalledWith("https://status.example.com")
+    expect(screen.getByRole("link", { name: /billing/i })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /status/i })).not.toBeInTheDocument()
+  })
+
+  it("hides invalid links", () => {
+    render(
+      <ProviderCard
+        name="Links"
+        displayMode="used"
+        links={[
+          { label: " ", url: "https://status.example.com" },
+          { label: "Dashboard", url: "ftp://example.com" },
+          { label: "Status", url: "https://status.example.com" },
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("link", { name: /status/i })).toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: /dashboard/i })).toBeNull()
+  })
+
+  it("shows cooldown hint", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    const lastManualRefreshAt = now.getTime() - (REFRESH_COOLDOWN_MS - 65_000)
+    render(
+      <ProviderCard
+        name="Cooldown"
+        displayMode="used"
+        lastManualRefreshAt={lastManualRefreshAt}
+        onRetry={() => {}}
+      />
+    )
+    expect(screen.getByText("Available in 1m 5s")).toBeInTheDocument()
+  })
+
+  it("shows seconds-only cooldown", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    const lastManualRefreshAt = now.getTime() - (REFRESH_COOLDOWN_MS - 30_000)
+    render(
+      <ProviderCard
+        name="Cooldown"
+        displayMode="used"
+        lastManualRefreshAt={lastManualRefreshAt}
+        onRetry={() => {}}
+      />
+    )
+    expect(screen.getByText("Available in 30s")).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("formats fixed-precision numbers with trailing zeros", () => {
+    expect(formatFixedPrecisionNumber(Number.NaN)).toBe("0")
+    expect(formatFixedPrecisionNumber(5)).toBe("5")
+    expect(formatFixedPrecisionNumber(5.129)).toBe("5.13")
+    expect(formatFixedPrecisionNumber(5.1)).toBe("5.10")
+    expect(formatFixedPrecisionNumber(5.5)).toBe("5.50")
+    expect(formatFixedPrecisionNumber(1000)).toBe("1,000")
+    expect(formatFixedPrecisionNumber(10000)).toBe("10,000")
+    expect(formatFixedPrecisionNumber(1234567.89)).toBe("1,234,567.89")
+  })
+
+  it("supports displayMode=left for percent (number + bar fill)", () => {
+    render(
+      <ProviderCard
+        name="Left"
+        displayMode="left"
+        lines={[
+          { type: "progress", label: "Session", used: 42, limit: 100, format: { kind: "percent" } },
+        ]}
+      />
+    )
+    expect(screen.getByText("58% left")).toBeInTheDocument()
+    expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "58")
+  })
+
+  it("shows resets secondary text when resetsAt is present", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        lines={[
+          {
+            type: "progress",
+            label: "Monthly",
+            used: 12.34,
+            limit: 100,
+            format: { kind: "dollars" },
+            resetsAt: "2026-02-02T01:05:00.000Z",
+          },
+        ]}
+      />
+    )
+    expect(screen.getByText("Resets in 1h 5m")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        formatResetTooltipText({
+          nowMs: now.getTime(),
+          resetsAtIso: "2026-02-02T01:05:00.000Z",
+          visibleMode: "relative",
+        })!
+      )
+    ).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("does not add onboarding tip cards for reset times", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-02-02T00:00:00.000Z"))
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        lines={[
+          {
+            type: "progress",
+            label: "Session",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "2026-02-02T01:00:00.000Z",
+          },
+          {
+            type: "progress",
+            label: "Weekly",
+            used: 20,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "2026-02-03T00:00:00.000Z",
+          },
+        ]}
+      />
+    )
+
+    expect(screen.queryByRole("note", { name: "Reset Time Display" })).not.toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("does not render reset tooltip for invalid reset timestamps", () => {
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        lines={[
+          {
+            type: "progress",
+            label: "Invalid",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "not-a-date",
+          },
+        ]}
+      />
+    )
+
+    expect(screen.getByText("100% cap")).toBeInTheDocument()
+    expect(screen.queryByText(/^Next reset:/)).not.toBeInTheDocument()
+  })
+
+  it("shows 'Resets soon' when reset is under 5 minutes away", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        lines={[
+          {
+            type: "progress",
+            label: "Short",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "2026-02-02T00:04:59.000Z",
+          },
+        ]}
+      />
+    )
+    expect(screen.getByText("Resets soon")).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("keeps standard reset text at exactly 5 minutes", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        lines={[
+          {
+            type: "progress",
+            label: "Boundary",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "2026-02-02T00:05:00.000Z",
+          },
+        ]}
+      />
+    )
+    expect(screen.getByText("Resets in 5m")).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("shows 'Resets soon' for stale reset timestamps in relative mode", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:06:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        lines={[
+          {
+            type: "progress",
+            label: "Stale Relative",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "2026-02-02T00:05:00.000Z",
+          },
+        ]}
+      />
+    )
+    expect(screen.getAllByText("Resets soon")).toHaveLength(2)
+    vi.useRealTimers()
+  })
+
+  it("shows 'Resets soon' for stale reset timestamps in absolute mode", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:06:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        resetTimerDisplayMode="absolute"
+        lines={[
+          {
+            type: "progress",
+            label: "Stale Absolute",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: "2026-02-02T00:05:00.000Z",
+          },
+        ]}
+      />
+    )
+    expect(screen.getAllByText("Resets soon")).toHaveLength(2)
+    vi.useRealTimers()
+  })
+
+  it("toggles reset timer display mode from reset label", async () => {
+    vi.useFakeTimers()
+    const now = new Date(2026, 1, 2, 0, 0, 0)
+    vi.setSystemTime(now)
+    const onToggle = vi.fn()
+    const resetsAt = new Date(2026, 1, 2, 1, 5, 0).toISOString()
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        resetTimerDisplayMode="absolute"
+        onResetTimerDisplayModeToggle={onToggle}
+        lines={[
+          {
+            type: "progress",
+            label: "Monthly",
+            used: 12.34,
+            limit: 100,
+            format: { kind: "dollars" },
+            resetsAt,
+          },
+        ]}
+      />
+    )
+    const resetButton = screen.getByRole("button", { name: /^Resets today at / })
+    expect(resetButton).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        formatResetTooltipText({
+          nowMs: now.getTime(),
+          resetsAtIso: resetsAt,
+          visibleMode: "absolute",
+        })!
+      )
+    ).toBeInTheDocument()
+    fireEvent.click(resetButton)
+    expect(onToggle).toHaveBeenCalledTimes(1)
+    vi.useRealTimers()
+  })
+
+  it("toggles usage display mode from the usage value when enabled", () => {
+    const onUsageToggle = vi.fn()
+    render(
+      <ProviderCard
+        name="Usage"
+        displayMode="left"
+        onUsageValueToggle={onUsageToggle}
+        lines={[
+          {
+            type: "progress",
+            label: "Session",
+            used: 40,
+            limit: 100,
+            format: { kind: "percent" },
+          },
+        ]}
+      />
+    )
+    const usageButton = screen.getByRole("button", { name: "60% left" })
+    fireEvent.click(usageButton)
+    expect(onUsageToggle).toHaveBeenCalledTimes(1)
+  })
+
+  it("renders the usage value as plain text without the usage toggle", () => {
+    render(
+      <ProviderCard
+        name="Usage"
+        displayMode="left"
+        lines={[
+          {
+            type: "progress",
+            label: "Session",
+            used: 40,
+            limit: 100,
+            format: { kind: "percent" },
+          },
+        ]}
+      />
+    )
+    expect(screen.queryByRole("button", { name: "60% left" })).not.toBeInTheDocument()
+    expect(screen.getByText("60% left")).toBeInTheDocument()
+  })
+
+  it("shows tomorrow context for absolute reset labels", () => {
+    vi.useFakeTimers()
+    const now = new Date(2026, 1, 2, 20, 0, 0)
+    const resetsAt = new Date(2026, 1, 3, 9, 30, 0)
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        resetTimerDisplayMode="absolute"
+        lines={[
+          {
+            type: "progress",
+            label: "Daily",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: resetsAt.toISOString(),
+          },
+        ]}
+      />
+    )
+    expect(screen.getByText(/^Resets tomorrow at /)).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("shows short date context for absolute labels within a week", () => {
+    vi.useFakeTimers()
+    const now = new Date(2026, 1, 2, 10, 0, 0)
+    const resetsAt = new Date(2026, 1, 5, 16, 0, 0)
+    vi.setSystemTime(now)
+    const dateText = formatMonthDay(resetsAt)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        resetTimerDisplayMode="absolute"
+        lines={[
+          {
+            type: "progress",
+            label: "Weekly",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: resetsAt.toISOString(),
+          },
+        ]}
+      />
+    )
+    expect(
+      screen.getByText((content) => content.startsWith(`Resets ${dateText} at `))
+    ).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("shows short date context for absolute labels beyond a week", () => {
+    vi.useFakeTimers()
+    const now = new Date(2026, 1, 2, 10, 0, 0)
+    const resetsAt = new Date(2026, 1, 20, 16, 0, 0)
+    vi.setSystemTime(now)
+    const dateText = formatMonthDay(resetsAt)
+    render(
+      <ProviderCard
+        name="Resets"
+        displayMode="used"
+        resetTimerDisplayMode="absolute"
+        lines={[
+          {
+            type: "progress",
+            label: "Monthly",
+            used: 10,
+            limit: 100,
+            format: { kind: "percent" },
+            resetsAt: resetsAt.toISOString(),
+          },
+        ]}
+      />
+    )
+    expect(
+      screen.getByText((content) => content.startsWith(`Resets ${dateText} at `))
+    ).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it.each(["used", "left"] as const)("shows actual quota and reset time without predictions in %s mode", (displayMode) => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-02-02T12:00:00.000Z"))
+    render(
+      <ProviderCard name="Codex" displayMode={displayMode} lines={[{
+        type: "progress", label: "Weekly", used: 60, limit: 100,
+        format: { kind: "percent" }, resetsAt: "2026-02-03T00:00:00.000Z",
+        periodDurationMs: 24 * 60 * 60 * 1000,
+      }]} />
+    )
+    expect(screen.getByText(displayMode === "used" ? "60%" : "40% left")).toBeInTheDocument()
+    expect(screen.getByText("Resets in 12h 0m")).toBeInTheDocument()
+    expect(document.querySelector("[data-pace-status]")).toBeNull()
+    expect(document.querySelector('[data-slot="progress-marker"]')).toBeNull()
+    expect(screen.queryByText(/runs out|at reset|in deficit|expected pace/i)).not.toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("fires retry from header button", () => {
+    const onRetry = vi.fn()
+    const { container } = render(
+      <ProviderCard
+        name="Retry"
+        displayMode="used"
+        onRetry={onRetry}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    const buttons = Array.from(container.querySelectorAll("button"))
+    const iconButton = buttons.find((button) => button.textContent === "")
+    expect(iconButton).toBeTruthy()
+    if (iconButton) {
+      iconButton.focus()
+      iconButton.click()
+    }
+    expect(onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  it("renders refresh button when cooldown expired", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    const lastManualRefreshAt = now.getTime() - (REFRESH_COOLDOWN_MS + 1000)
+    const onRetry = vi.fn()
+    const { container } = render(
+      <ProviderCard
+        name="Retry"
+        displayMode="used"
+        onRetry={onRetry}
+        lastManualRefreshAt={lastManualRefreshAt}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    const buttons = Array.from(container.querySelectorAll("button"))
+    const iconButton = buttons.find((button) => button.textContent === "")
+    expect(iconButton).toBeTruthy()
+    iconButton?.click()
+    expect(onRetry).toHaveBeenCalledTimes(1)
+    vi.useRealTimers()
+  })
+
+  it("cleans up cooldown timers on unmount", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:00:00.000Z")
+    vi.setSystemTime(now)
+    const lastManualRefreshAt = now.getTime() - (REFRESH_COOLDOWN_MS - 1000)
+    const clearIntervalSpy = vi.spyOn(global, "clearInterval")
+    const clearTimeoutSpy = vi.spyOn(global, "clearTimeout")
+    const { unmount } = render(
+      <ProviderCard
+        name="Cooldown"
+        displayMode="used"
+        lastManualRefreshAt={lastManualRefreshAt}
+        onRetry={() => {}}
+      />
+    )
+    unmount()
+    expect(clearIntervalSpy).toHaveBeenCalled()
+    expect(clearTimeoutSpy).toHaveBeenCalled()
+    clearIntervalSpy.mockRestore()
+    clearTimeoutSpy.mockRestore()
+    vi.useRealTimers()
+  })
+
+  it("renders as a card with the header (logo, name, plan) outside the bordered body", () => {
+    render(
+      <ProviderCard
+        name="Claude"
+        plan="Max 5x"
+        displayMode="used"
+        asCard
+        iconUrl="/claude.svg"
+        pluginId="claude"
+        brandColor="#DE7356"
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+
+    const body = screen.getByTestId("provider-card-body")
+    // Name and plan live outside the card body.
+    expect(within(body).queryByText("Claude")).not.toBeInTheDocument()
+    expect(within(body).queryByText("Max 5x")).not.toBeInTheDocument()
+    expect(screen.getByText("Claude")).toBeInTheDocument()
+    expect(screen.getByText("Max 5x")).toBeInTheDocument()
+    // Lines live inside it.
+    expect(within(body).getByText("Label")).toBeInTheDocument()
+    // Cards separate themselves — no divider even without showSeparator=false.
+    expect(screen.queryAllByRole("separator")).toHaveLength(0)
+  })
+
+  it("divides progress lines from the text details in the detail view", () => {
+    const lines: MetricLine[] = [
+      { type: "progress", label: "Session", used: 40, limit: 100, format: { kind: "percent" } },
+      { type: "text", label: "Today", value: "$12.40" },
+      { type: "text", label: "claude-sonnet-5", value: "62% · Today $8.00" },
+    ]
+    const { container, unmount } = render(
+      <ProviderCard
+        name="Claude"
+        displayMode="used"
+        scopeFilter="all"
+        showSeparator={false}
+        lines={lines}
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+          { type: "text", label: "Today", scope: "detail" },
+        ]}
+      />
+    )
+    expect(within(container).getAllByRole("separator")).toHaveLength(1)
+    unmount()
+
+    // The overview keeps its compact, divider-free rows.
+    render(
+      <ProviderCard
+        name="Claude"
+        displayMode="used"
+        scopeFilter="overview"
+        asCard
+        showSeparator={false}
+        lines={lines}
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+          { type: "text", label: "Today", scope: "overview" },
+        ]}
+      />
+    )
+    expect(screen.queryAllByRole("separator")).toHaveLength(0)
+  })
+
+  it("omits separator when disabled", () => {
+    const { container } = render(
+      <ProviderCard
+        name="NoSep"
+        displayMode="used"
+        showSeparator={false}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    expect(within(container).queryAllByRole("separator")).toHaveLength(0)
+  })
+
+  it("filters lines by scope=overview", () => {
+    render(
+      <ProviderCard
+        name="Filtered"
+        displayMode="used"
+        scopeFilter="overview"
+        skeletonLines={[
+          { type: "text", label: "Primary", scope: "overview" },
+          { type: "text", label: "Secondary", scope: "detail" },
+        ]}
+        lines={[
+          { type: "text", label: "Primary", value: "Shown" },
+          { type: "text", label: "Secondary", value: "Hidden" },
+        ]}
+      />
+    )
+    expect(screen.getByText("Primary")).toBeInTheDocument()
+    expect(screen.getByText("Shown")).toBeInTheDocument()
+    expect(screen.queryByText("Secondary")).not.toBeInTheDocument()
+    expect(screen.queryByText("Hidden")).not.toBeInTheDocument()
+  })
+
+  it("shows all lines when scopeFilter=all", () => {
+    render(
+      <ProviderCard
+        name="All"
+        displayMode="used"
+        scopeFilter="all"
+        skeletonLines={[
+          { type: "text", label: "Primary", scope: "overview" },
+          { type: "text", label: "Secondary", scope: "detail" },
+        ]}
+        lines={[
+          { type: "text", label: "Primary", value: "One" },
+          { type: "text", label: "Secondary", value: "Two" },
+        ]}
+      />
+    )
+    expect(screen.getByText("Primary")).toBeInTheDocument()
+    expect(screen.getByText("One")).toBeInTheDocument()
+    expect(screen.getByText("Secondary")).toBeInTheDocument()
+    expect(screen.getByText("Two")).toBeInTheDocument()
+  })
+
+  it("filters skeleton lines during loading", () => {
+    render(
+      <ProviderCard
+        name="Loading"
+        displayMode="used"
+        loading
+        scopeFilter="overview"
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+          { type: "progress", label: "Extra", scope: "detail" },
+        ]}
+      />
+    )
+    expect(screen.getByText("Session")).toBeInTheDocument()
+    expect(screen.queryByText("Extra")).not.toBeInTheDocument()
+  })
+
+  it("keeps stale data visible while loading (stale-while-revalidate)", () => {
+    render(
+      <ProviderCard
+        name="SWR"
+        displayMode="used"
+        loading
+        lastUpdatedAt={Date.now() - 60_000}
+        lines={[
+          { type: "text", label: "Label", value: "Value" },
+          { type: "progress", label: "Session", used: 32, limit: 100, format: { kind: "percent" } },
+        ]}
+        skeletonLines={[
+          { type: "text", label: "Label", scope: "overview" },
+          { type: "progress", label: "Session", scope: "overview" },
+        ]}
+      />
+    )
+    // Real data stays on screen — no skeleton swap
+    expect(screen.getByText("Value")).toBeInTheDocument()
+    expect(screen.getByText("32%")).toBeInTheDocument()
+    // Progress bar shows shimmer overlay
+    expect(document.querySelector('[data-slot="progress-refreshing"]')).toBeTruthy()
+  })
+
+  it("skips skeleton on refresh when lastUpdatedAt set even if filtered lines are empty", () => {
+    render(
+      <ProviderCard
+        name="FilteredEmpty"
+        displayMode="used"
+        loading
+        lastUpdatedAt={Date.now() - 60_000}
+        scopeFilter="overview"
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+        ]}
+        lines={[
+          { type: "text", label: "DetailOnly", value: "Hidden" },
+        ]}
+      />
+    )
+    // skeleton label for "Session" should not render because we have prior data (lastUpdatedAt set)
+    expect(screen.queryByText("Session")).toBeNull()
+    // and the detail-scoped line stays filtered out
+    expect(screen.queryByText("DetailOnly")).toBeNull()
+  })
+
+  it("renders skeleton on first load when no stale data exists", () => {
+    render(
+      <ProviderCard
+        name="Cold"
+        displayMode="used"
+        loading
+        skeletonLines={[{ type: "progress", label: "Session", scope: "overview" }]}
+      />
+    )
+    expect(screen.getByText("Session")).toBeInTheDocument()
+    expect(document.querySelector('[data-slot="progress-refreshing"]')).toBeNull()
+  })
+
+  it("shows inline warning with stale data on refresh error", () => {
+    render(
+      <ProviderCard
+        name="StaleErr"
+        displayMode="used"
+        error="Couldn't update data. Try again?"
+        lastUpdatedAt={Date.now() - 60_000}
+        lines={[
+          { type: "progress", label: "Session", used: 40, limit: 100, format: { kind: "percent" } },
+        ]}
+      />
+    )
+    // Stale data still visible
+    expect(screen.getByText("40%")).toBeInTheDocument()
+    // Inline warning shown (not the full PluginError alert) — error text appears
+    // in both the trigger and the tooltip content via our mocked Tooltip
+    expect(screen.getAllByText("Couldn't update data. Try again?").length).toBeGreaterThan(0)
+    expect(screen.queryByRole("alert")).toBeNull()
+  })
+
+  it("shows full PluginError when errored without stale data", () => {
+    render(
+      <ProviderCard
+        name="ColdErr"
+        displayMode="used"
+        error="Nope"
+        onRetry={() => {}}
+      />
+    )
+    expect(screen.getByRole("alert")).toBeInTheDocument()
+    expect(screen.getByText("Nope")).toBeInTheDocument()
+  })
+
+  it("shows relative last-updated timestamp in retry tooltip", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:05:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Updated"
+        displayMode="used"
+        onRetry={() => {}}
+        lastUpdatedAt={now.getTime() - 120_000}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    expect(screen.getByText(/Updated 2m ago/)).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("shows 'just now' for very recent last-updated timestamps", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:05:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Fresh"
+        displayMode="used"
+        onRetry={() => {}}
+        lastUpdatedAt={now.getTime() - 5_000}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    expect(screen.getByText(/Updated just now/)).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("clamps negative time deltas to 'just now' (clock skew)", () => {
+    vi.useFakeTimers()
+    const now = new Date("2026-02-02T00:05:00.000Z")
+    vi.setSystemTime(now)
+    render(
+      <ProviderCard
+        name="Skew"
+        displayMode="used"
+        onRetry={() => {}}
+        lastUpdatedAt={now.getTime() + 60_000}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    expect(screen.getByText(/Updated just now/)).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it("omits retry tooltip content when lastUpdatedAt is null", () => {
+    render(
+      <ProviderCard
+        name="NoTimestamp"
+        displayMode="used"
+        onRetry={() => {}}
+        lines={[{ type: "text", label: "Label", value: "Value" }]}
+      />
+    )
+    expect(screen.queryByText(/Updated/)).toBeNull()
+  })
+
+  it("overview scope shows only the escalated line", () => {
+    render(
+      <ProviderCard
+        name="OpenCode"
+        displayMode="used"
+        scopeFilter="overview"
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+          { type: "progress", label: "Weekly", scope: "overview" },
+          { type: "progress", label: "Monthly", scope: "detail", escalateAtPercent: 98 },
+        ]}
+        lines={[
+          { type: "progress", label: "Session", used: 0, limit: 100, format: { kind: "percent" } },
+          { type: "progress", label: "Weekly", used: 40, limit: 100, format: { kind: "percent" } },
+          { type: "progress", label: "Monthly", used: 99, limit: 100, format: { kind: "percent" } },
+        ]}
+      />
+    )
+    expect(screen.getByText("Monthly")).toBeInTheDocument()
+    expect(screen.queryByText("Session")).not.toBeInTheDocument()
+    expect(screen.queryByText("Weekly")).not.toBeInTheDocument()
+  })
+
+  it("overview scope keeps normal lines when below threshold", () => {
+    render(
+      <ProviderCard
+        name="OpenCode"
+        displayMode="used"
+        scopeFilter="overview"
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+          { type: "progress", label: "Weekly", scope: "overview" },
+          { type: "progress", label: "Monthly", scope: "detail", escalateAtPercent: 98 },
+        ]}
+        lines={[
+          { type: "progress", label: "Session", used: 10, limit: 100, format: { kind: "percent" } },
+          { type: "progress", label: "Weekly", used: 40, limit: 100, format: { kind: "percent" } },
+          { type: "progress", label: "Monthly", used: 50, limit: 100, format: { kind: "percent" } },
+        ]}
+      />
+    )
+    expect(screen.getByText("Session")).toBeInTheDocument()
+    expect(screen.getByText("Weekly")).toBeInTheDocument()
+    expect(screen.queryByText("Monthly")).not.toBeInTheDocument()
+  })
+
+  it("detail scope shows all lines even when escalated", () => {
+    render(
+      <ProviderCard
+        name="OpenCode"
+        displayMode="used"
+        scopeFilter="all"
+        skeletonLines={[
+          { type: "progress", label: "Session", scope: "overview" },
+          { type: "progress", label: "Monthly", scope: "detail", escalateAtPercent: 98 },
+        ]}
+        lines={[
+          { type: "progress", label: "Session", used: 0, limit: 100, format: { kind: "percent" } },
+          { type: "progress", label: "Monthly", used: 99, limit: 100, format: { kind: "percent" } },
+        ]}
+      />
+    )
+    expect(screen.getByText("Session")).toBeInTheDocument()
+    expect(screen.getByText("Monthly")).toBeInTheDocument()
+  })
+
+  it("declutters per-model rows: percent only, cost breakdown in the tooltip", () => {
+    render(
+      <ProviderCard
+        name="Claude"
+        displayMode="used"
+        scopeFilter="all"
+        skeletonLines={[{ type: "text", label: "Today", scope: "detail" }]}
+        lines={[
+          { type: "text", label: "Today", value: "$92.56 · 94M tokens" },
+          { type: "text", label: "Opus 4.8", value: "83.4% · Today $1.22 · 7d $1100 · 30d $6424" },
+        ]}
+      />
+    )
+
+    // Model row shows only the percent...
+    expect(screen.getByText("Opus 4.8")).toBeInTheDocument()
+    expect(screen.getByText("83.4%")).toBeInTheDocument()
+    expect(screen.queryByText(/83\.4% ·/)).not.toBeInTheDocument()
+    // ...with costs moved into the (inline-mocked) tooltip content.
+    expect(screen.getByText("Today $1.22")).toBeInTheDocument()
+    expect(screen.getByText("7 days $1100")).toBeInTheDocument()
+    expect(screen.getByText("30 days $6424")).toBeInTheDocument()
+    // Manifest-declared text lines keep the classic full-value rendering.
+    expect(screen.getByText("$92.56 · 94M tokens")).toBeInTheDocument()
+  })
+
+  it("renders a percent-only model row without a tooltip", () => {
+    render(
+      <ProviderCard
+        name="Claude"
+        displayMode="used"
+        scopeFilter="all"
+        skeletonLines={[]}
+        lines={[{ type: "text", label: "GPT-5.5", value: "100%" }]}
+      />
+    )
+
+    expect(screen.getByText("GPT-5.5")).toBeInTheDocument()
+    expect(screen.getByText("100%")).toBeInTheDocument()
+  })
+
+  it("derives a hover breakdown for percent-only models from the provider's period totals", () => {
+    render(
+      <ProviderCard
+        name="Codex"
+        displayMode="used"
+        scopeFilter="all"
+        skeletonLines={[
+          { type: "text", label: "Today", scope: "detail" },
+          { type: "text", label: "Last 30 Days", scope: "detail" },
+        ]}
+        lines={[
+          { type: "text", label: "Today", value: "$458.16 · 333M" },
+          { type: "text", label: "Last 30 Days", value: "$774.65 · 563M" },
+          { type: "text", label: "GPT-5.6 Sol", value: "99.7%" },
+          { type: "text", label: "GPT-5.5", value: "0.3%" },
+        ]}
+      />
+    )
+
+    // Percent stays inline; Today/30d are derived (provider total × the row's %)
+    // into the tooltip, matching Claude's per-model hover.
+    expect(screen.getByText("99.7%")).toBeInTheDocument()
+    expect(screen.getByText("Today $456.79")).toBeInTheDocument()
+    expect(screen.getByText("30 days $772.33")).toBeInTheDocument()
+    // No 7-day source for this provider, so that line is omitted.
+    expect(screen.queryByText(/7 days/)).not.toBeInTheDocument()
+  })
+
+  it("keeps normal rendering for unmatched text lines that are not model-shaped", () => {
+    render(
+      <ProviderCard
+        name="Claude"
+        displayMode="used"
+        scopeFilter="all"
+        skeletonLines={[]}
+        lines={[{ type: "text", label: "Note", value: "361M tokens" }]}
+      />
+    )
+
+    expect(screen.getByText("Note")).toBeInTheDocument()
+    expect(screen.getByText("361M tokens")).toBeInTheDocument()
+  })
+})
+
+describe("groupLinesByType", () => {
+  it("returns empty array for empty input", () => {
+    expect(groupLinesByType([])).toEqual([])
+  })
+
+  it("groups consecutive text lines together", () => {
+    const lines = [
+      { type: "text" as const, label: "Today", value: "$0.00" },
+      { type: "text" as const, label: "Yesterday", value: "$1.00" },
+      { type: "text" as const, label: "Last 30 Days", value: "$5.00" },
+    ]
+    const groups = groupLinesByType(lines)
+    expect(groups).toHaveLength(1)
+    expect(groups[0].kind).toBe("text")
+    expect(groups[0].lines).toHaveLength(3)
+  })
+
+  it("keeps non-text lines as separate 'other' entries", () => {
+    const lines = [
+      { type: "progress" as const, label: "Session", used: 50, limit: 100, format: { kind: "percent" as const } },
+      { type: "progress" as const, label: "Weekly", used: 30, limit: 100, format: { kind: "percent" as const } },
+    ]
+    const groups = groupLinesByType(lines)
+    expect(groups).toHaveLength(1)
+    expect(groups[0].kind).toBe("other")
+    expect(groups[0].lines).toHaveLength(2)
+  })
+
+  it("creates separate groups for alternating text and non-text lines", () => {
+    const lines = [
+      { type: "progress" as const, label: "Session", used: 50, limit: 100, format: { kind: "percent" as const } },
+      { type: "text" as const, label: "Today", value: "$0.00" },
+      { type: "text" as const, label: "Yesterday", value: "$1.00" },
+      { type: "badge" as const, label: "Status", text: "OK" },
+    ]
+    const groups = groupLinesByType(lines)
+    expect(groups).toHaveLength(3)
+    expect(groups[0].kind).toBe("other")
+    expect(groups[0].lines).toHaveLength(1)
+    expect(groups[1].kind).toBe("text")
+    expect(groups[1].lines).toHaveLength(2)
+    expect(groups[2].kind).toBe("other")
+    expect(groups[2].lines).toHaveLength(1)
+  })
+})

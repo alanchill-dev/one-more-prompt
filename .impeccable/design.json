@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T16:01:50.397616+00:00",
+  "title": "Design System: One More Prompt",
+  "extensions": {
+    "colorMeta": {
+      "wire-orange": {
+        "role": "primary",
+        "displayName": "Wire Orange"
+      },
+      "wire-paper": {
+        "role": "neutral",
+        "displayName": "Wire Paper"
+      },
+      "wire-ink": {
+        "role": "neutral",
+        "displayName": "Wire Ink"
+      },
+      "wire-stone": {
+        "role": "neutral",
+        "displayName": "Wire Stone"
+      },
+      "card-light": {
+        "role": "neutral",
+        "displayName": "Light Card"
+      },
+      "popover-light": {
+        "role": "neutral",
+        "displayName": "Light Popover"
+      },
+      "secondary-light": {
+        "role": "neutral",
+        "displayName": "Light Secondary"
+      },
+      "muted-light": {
+        "role": "neutral",
+        "displayName": "Light Muted"
+      },
+      "accent-light": {
+        "role": "neutral",
+        "displayName": "Light Accent"
+      },
+      "border-light": {
+        "role": "neutral",
+        "displayName": "Light Border"
+      },
+      "destructive-light": {
+        "role": "error",
+        "displayName": "Light Destructive"
+      },
+      "background-dark": {
+        "role": "neutral",
+        "displayName": "Dark Background"
+      },
+      "popover-dark": {
+        "role": "neutral",
+        "displayName": "Dark Popover"
+      },
+      "secondary-dark": {
+        "role": "neutral",
+        "displayName": "Dark Secondary"
+      },
+      "muted-foreground-dark": {
+        "role": "neutral",
+        "displayName": "Dark Muted Foreground"
+      },
+      "accent-dark": {
+        "role": "neutral",
+        "displayName": "Dark Accent"
+      },
+      "destructive-dark": {
+        "role": "error",
+        "displayName": "Dark Destructive"
+      },
+      "border-dark": {
+        "role": "neutral",
+        "displayName": "Dark Border"
+      },
+      "input-dark": {
+        "role": "neutral",
+        "displayName": "Dark Input"
+      }
+    },
+    "typographyMeta": {
+      "setup-heading": {
+        "displayName": "Setup Heading",
+        "purpose": "Main setup heading."
+      },
+      "guide-heading": {
+        "displayName": "Guide Heading",
+        "purpose": "Current guide instruction."
+      },
+      "task-title": {
+        "displayName": "Task Title",
+        "purpose": "Setup workflow row title."
+      },
+      "setup-body": {
+        "displayName": "Setup Body",
+        "purpose": "Setup purpose description."
+      },
+      "guide-body": {
+        "displayName": "Guide Body",
+        "purpose": "Guide instruction text."
+      },
+      "control-label": {
+        "displayName": "Control Label",
+        "purpose": "Shared button and native select labels."
+      },
+      "small-label": {
+        "displayName": "Small Label",
+        "purpose": "Shared badges."
+      }
+    },
+    "shadows": [
+      {
+        "name": "workspace-selection",
+        "value": "inset 0 1px 2px color-mix(in srgb, var(--foreground) 8%, transparent), 0 1px 0 var(--header-nav-key-highlight)",
+        "purpose": "Shallow current-destination carriage."
+      },
+      {
+        "name": "guide-callout",
+        "value": "0 14px 36px rgb(0 0 0 / 20%)",
+        "purpose": "Floating guide instruction beside its target."
+      }
+    ],
+    "motion": [
+      {
+        "name": "setup-reveal",
+        "value": "200ms cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Setup content reveal, removed for reduced motion."
+      },
+      {
+        "name": "setup-action",
+        "value": "180ms cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Setup action background change."
+      },
+      {
+        "name": "guide-spotlight",
+        "value": "transform 200ms ease-out, opacity 160ms ease-out",
+        "purpose": "Guide spotlight state changes; direct target tracking and reduced motion disable transitions."
+      },
+      {
+        "name": "workspace-selection",
+        "value": "transform 240ms cubic-bezier(.22, 1, .36, 1), opacity 140ms ease",
+        "purpose": "Shared navigation carriage movement, removed for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "guide-compact",
+        "value": "560px"
+      },
+      {
+        "name": "setup-compact",
+        "value": "600px"
+      },
+      {
+        "name": "shell-sm",
+        "value": "640px"
+      },
+      {
+        "name": "workspace-compact",
+        "value": "780px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Shared primary action; semantic colors follow the active theme.",
+      "html": "<button type=\"button\" class=\"ds-btn-default\">Next</button>",
+      "css": ".ds-btn-default{font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:14px;font-weight:500;line-height:20px;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 10px;border:1px solid transparent;border-radius:var(--radius-md,8px);white-space:nowrap;cursor:pointer;transition:background-color 150ms,color 150ms,border-color 150ms;background:var(--primary,#22211f);color:var(--primary-foreground,#f0f0ee);}.ds-btn-default:hover{background:color-mix(in srgb,var(--primary,#22211f) 80%,transparent);}.ds-btn-default:focus-visible{outline:none;border-color:var(--ring,#f5572f);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring,#f5572f) 50%,transparent)}.ds-btn-default:disabled{pointer-events:none;opacity:.5}"
+    },
+    {
+      "name": "Setup Action",
+      "kind": "button",
+      "refersTo": "button-setup",
+      "description": "The setup main action uses the existing orange/ink assignment.",
+      "html": "<button type=\"button\" class=\"ds-btn-setup\">Check Local Records<svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z\"/></svg></button>",
+      "css": ".ds-btn-setup{font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:14px;font-weight:500;line-height:20px;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 10px;border:1px solid transparent;border-radius:var(--radius-md,8px);white-space:nowrap;cursor:pointer;transition:background-color 150ms,color 150ms,border-color 150ms;min-height:44px;padding:0 14px;background:var(--page-accent,#f5572f);color:var(--wire-ink,#22211f);font-weight:600;transition:background-color 180ms cubic-bezier(.16,1,.3,1);}.ds-btn-setup:hover{background:color-mix(in srgb,var(--page-accent,#f5572f) 92%,var(--wire-paper,#f0f0ee));}.ds-btn-setup:focus-visible{outline:none;border-color:var(--ring,#f5572f);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring,#f5572f) 50%,transparent)}.ds-btn-setup:disabled{pointer-events:none;opacity:.5}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action; dark appearance uses the shared input tint.",
+      "html": "<button type=\"button\" class=\"ds-btn-outline\">Back</button>",
+      "css": ".ds-btn-outline{font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:14px;font-weight:500;line-height:20px;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 10px;border:1px solid transparent;border-radius:var(--radius-md,8px);white-space:nowrap;cursor:pointer;transition:background-color 150ms,color 150ms,border-color 150ms;border-color:var(--border,#d4d2cc);background:var(--background,#f0f0ee);color:var(--foreground,#22211f);box-shadow:0 1px 2px rgb(0 0 0 / .05);}.ds-btn-outline:hover{background:var(--muted,#e7e6e2);color:var(--foreground,#22211f);}.ds-btn-outline:focus-visible{outline:none;border-color:var(--ring,#f5572f);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring,#f5572f) 50%,transparent)}.ds-btn-outline:disabled{pointer-events:none;opacity:.5}:host-context(.dark) .ds-btn-outline{background:color-mix(in srgb,var(--input) 30%,transparent);border-color:var(--input)}:host-context(.dark) .ds-btn-outline:hover{background:color-mix(in srgb,var(--input) 50%,transparent)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Low-emphasis action using the shared control geometry.",
+      "html": "<button type=\"button\" class=\"ds-btn-ghost\">Skip</button>",
+      "css": ".ds-btn-ghost{font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:14px;font-weight:500;line-height:20px;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 10px;border:1px solid transparent;border-radius:var(--radius-md,8px);white-space:nowrap;cursor:pointer;transition:background-color 150ms,color 150ms,border-color 150ms;background:transparent;color:var(--foreground,#22211f);}.ds-btn-ghost:hover{background:var(--muted,#e7e6e2);}.ds-btn-ghost:focus-visible{outline:none;border-color:var(--ring,#f5572f);box-shadow:0 0 0 3px color-mix(in srgb,var(--ring,#f5572f) 50%,transparent)}.ds-btn-ghost:disabled{pointer-events:none;opacity:.5}:host-context(.dark) .ds-btn-ghost:hover{background:color-mix(in srgb,var(--muted) 50%,transparent)}"
+    },
+    {
+      "name": "Setup Language Field",
+      "kind": "input",
+      "refersTo": "language-select",
+      "description": "Native language select from the setup header.",
+      "html": "<label class=\"ds-language\"><select aria-label=\"Language\"><option>English</option><option>繁體中文</option></select><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z\"/></svg></label>",
+      "css": ".ds-language{position:relative;display:inline-flex;min-width:144px;max-width:100%;align-items:center}.ds-language select{width:100%;min-height:36px;appearance:none;border:1px solid color-mix(in srgb,var(--border,#d4d2cc) 70%,transparent);border-radius:10px;background:var(--card,#fafaf8);color:var(--foreground,#22211f);padding:8px 40px 8px 12px;font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:14px;font-weight:500;line-height:20px;cursor:pointer;outline:none;transition:background-color 200ms,border-color 200ms,box-shadow 200ms}.ds-language select:hover{background:var(--background,#f0f0ee)}.ds-language select:focus-visible{border-color:color-mix(in srgb,var(--ring,#f5572f) 70%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--ring,#f5572f) 35%,transparent)}.ds-language svg{position:absolute;right:12px;color:var(--muted-foreground,#625f5a);pointer-events:none}"
+    },
+    {
+      "name": "Secondary Badge",
+      "kind": "chip",
+      "refersTo": "badge-secondary",
+      "description": "Static secondary badge from the shared primitive.",
+      "html": "<span class=\"ds-badge\">Codex</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;border:1px solid transparent;border-radius:var(--radius-md,8px);padding:2px 8px;font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:12px;font-weight:500;line-height:16px;background:var(--secondary,#e4e3df);color:var(--secondary-foreground,#22211f)}"
+    },
+    {
+      "name": "Workspace Navigation",
+      "kind": "nav",
+      "refersTo": "workspace-destination",
+      "description": "Three current workspace destinations with the existing shared selection carriage.",
+      "html": "<nav class=\"ds-workspace\" aria-label=\"Workspace\"><span class=\"ds-selection\" aria-hidden=\"true\"><span></span></span><button type=\"button\" class=\"ds-destination\" aria-current=\"page\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z\"/></svg><span>Overview</span></button><button type=\"button\" class=\"ds-destination\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M216,72H130.67L102.93,51.2a16.12,16.12,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V200a16,16,0,0,0,16,16H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72Zm0,128H40V64H93.33L123.2,86.4A8,8,0,0,0,128,88h88Z\"/></svg><span>Projects</span></button><button type=\"button\" class=\"ds-destination\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z\"/></svg><span>Timeline</span></button></nav>",
+      "css": ".ds-workspace{position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:clamp(456px,46vw,516px);max-width:50vw;font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'}.ds-selection{position:absolute;inset:0 auto 0 0;width:calc(100% / 3);padding:4px;pointer-events:none}.ds-selection>span{position:relative;display:block;width:100%;height:100%;border:1px solid color-mix(in srgb,var(--foreground,#22211f) 9%,transparent);border-radius:5px;background:linear-gradient(180deg,color-mix(in srgb,var(--foreground,#22211f) 5%,transparent),color-mix(in srgb,var(--foreground,#22211f) 2%,transparent));box-shadow:inset 0 1px 2px color-mix(in srgb,var(--foreground,#22211f) 8%,transparent),0 1px 0 var(--header-nav-key-highlight,transparent)}.ds-selection>span::after{content:\"\";position:absolute;top:calc(50% - 7px);left:7px;width:2px;height:14px;border-radius:1px;background:var(--wire-orange,#f5572f)}.ds-destination{position:relative;display:flex;min-width:0;min-height:52px;align-items:center;justify-content:center;gap:9px;padding:8px 16px;border:0;border-radius:5px;background:transparent;color:var(--header-nav-muted,#625f5a);font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size:14px;font-weight:550;line-height:1.25;letter-spacing:.015em;white-space:nowrap;cursor:pointer;transition:color 180ms ease}.ds-destination svg{flex:0 0 20px;color:var(--header-nav-icon,#625f5a)}.ds-destination[aria-current=\"page\"],.ds-destination:hover{color:var(--foreground,#22211f)}.ds-destination[aria-current=\"page\"] svg,.ds-destination:hover svg{color:var(--header-nav-icon-active,#22211f)}.ds-destination:hover{background:color-mix(in srgb,var(--foreground,#22211f) 5%,transparent)}.ds-destination:active{background:color-mix(in srgb,var(--foreground,#22211f) 9%,transparent)}.ds-destination:focus-visible{outline:2px solid var(--wire-orange,#f5572f);outline-offset:2px}@media(max-width:780px){.ds-workspace{width:300px;max-width:42vw}.ds-destination{flex-direction:column;gap:3px;padding:6px}.ds-destination>span{font-size:11px;letter-spacing:0;white-space:normal;text-align:center}.ds-selection>span::after{left:9px;height:10px;top:calc(50% - 5px)}}"
+    },
+    {
+      "name": "Guide Callout",
+      "kind": "card",
+      "refersTo": "guide-callout",
+      "description": "A floating guide callout up to 360px wide, narrowing to 320px for side placement beside a measured real target; this specimen excludes placement logic and the panel-clipped dim mask.",
+      "html": "<aside class=\"ds-guide\" aria-label=\"Getting Started\"><div class=\"ds-guide-copy\"><h2>Read The Activity Rhythm</h2><p>Choose a time range and hover or focus a bar to compare activity and model shares. Open its details to inspect work from that period.</p></div><div class=\"ds-guide-progress\"><span>See Local Activity</span><span>Step 1 of 7</span></div><div class=\"ds-guide-actions\"><button type=\"button\" class=\"ds-guide-skip\">Skip Guide</button><div><button type=\"button\" class=\"ds-guide-back\" disabled>Back</button><button type=\"button\" class=\"ds-guide-next\">Next</button></div></div></aside>",
+      "css": ".ds-guide {\n  position: relative;\n  top: auto;\n  left: auto;\n  display: flex;\n  flex-direction: column;\n  width: 360px;\n  max-width: calc(100% - 24px);\n  max-height: 420px;\n  padding: 18px;\n  border-radius: 14px;\n  background: var(--card);\n  color: var(--foreground);\n  box-shadow: 0 14px 36px rgb(0 0 0 / 20%);\n  pointer-events: auto;\n}\n.ds-guide-copy {\n  display: flex;\n  flex: 1 1 auto;\n  flex-direction: column;\n  min-height: 0;\n  overflow: hidden;\n}\n.ds-guide-copy h2 {\n  flex: 0 0 auto;\n  margin: 0;\n  font-size: 18px;\n  font-weight: 650;\n  line-height: 1.4;\n  letter-spacing: -.015em;\n  text-wrap: balance;\n}\n.ds-guide-copy p {\n  flex: 1 1 auto;\n  min-height: 0;\n  margin: 8px 0 0;\n  overflow-y: auto;\n  font-size: 14px;\n  line-height: 1.6;\n  color: var(--muted-foreground);\n  text-wrap: pretty;\n  scrollbar-color: var(--muted-foreground) var(--card);\n  scrollbar-width: thin;\n}\n.ds-guide-progress {\n  display: flex;\n  flex: 0 0 auto;\n  align-items: baseline;\n  justify-content: space-between;\n  gap: 12px;\n  margin-top: 14px;\n  padding-top: 12px;\n  border-top: 1px solid var(--border);\n  font-size: 11px;\n  font-weight: 600;\n  line-height: 1.5;\n  color: var(--muted-foreground);\n}\n.ds-guide-actions {\n  display: flex;\n  flex: 0 0 auto;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n  margin-top: 10px;\n}\n.ds-guide button:focus-visible {\n  outline: 2px solid var(--ring);\n  outline-offset: 3px;\n}\n.ds-guide-error {\n  flex: 0 0 auto;\n  margin: 10px 0 0;\n  font-size: 12px;\n  line-height: 1.6;\n  color: var(--destructive);\n}\n\n.ds-guide{font-family:ui-sans-serif,system-ui,sans-serif}.ds-guide-actions>div{display:flex;flex-wrap:wrap;gap:8px}.ds-guide-actions button{min-height:44px;padding:0 10px;border:1px solid transparent;border-radius:var(--radius-md,8px);font-family:inherit;font-size:14px;font-weight:500;line-height:20px;cursor:pointer}.ds-guide-actions button:disabled{pointer-events:none;opacity:.5}.ds-guide-skip{background:transparent;color:var(--foreground,#22211f)}.ds-guide-skip:hover{background:var(--muted,#e7e6e2)}.ds-guide-back{border-color:var(--border,#d4d2cc)!important;background:var(--background,#f0f0ee);color:var(--foreground,#22211f)}.ds-guide-back:hover{background:var(--muted,#e7e6e2)}.ds-guide-next{background:var(--primary,#22211f);color:var(--primary-foreground,#f0f0ee)}.ds-guide-next:hover{background:color-mix(in srgb,var(--primary,#22211f) 80%,transparent)}"
+    },
+    {
+      "name": "Setup Task Row",
+      "kind": "custom",
+      "description": "A current setup workflow row with its dedicated Phosphor icon column and divider.",
+      "html": "<div class=\"ds-task\"><svg width=\"23\" height=\"23\" viewBox=\"0 0 256 256\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z\"/></svg><div><h2>Understand Your Usage</h2><p>Find busy periods and see which models used your tokens.</p></div></div>",
+      "css": ".ds-task{display:flex;align-items:flex-start;gap:14px;padding:15px 0;border-bottom:1px solid var(--border,#d4d2cc);font-family:ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';color:var(--foreground,#22211f)}.ds-task svg{flex:0 0 23px;margin-top:1px}.ds-task h2{margin:0;font-size:15px;font-weight:600;line-height:1.35}.ds-task p{margin:4px 0 0;font-size:13px;line-height:1.5;color:var(--muted-foreground,#625f5a)}@media(max-width:600px){.ds-task{padding:12px 0}}"
+    }
+  ],
+  "narrative": {
+    "overview": "This records One More Prompt's existing orange, paper and ink interface. The owner confirmed the existing logo, system UI typography, saved light/dark appearance and Phosphor icons as the authority for new work. No new visual identity is introduced.\n\nThe token inventory below comes from the implemented styles. Semantic CSS properties select the active theme; fixed wire colors keep the brand accent and onboarding action consistent. Setup and guide measurements describe those components, not a required layout for every page.",
+    "keyCharacteristics": [
+      "Orange marks selected state, primary setup actions and the guide target.",
+      "Paper/ink surfaces and hairline dividers organize aligned content.",
+      "System UI text, Phosphor icons and visible keyboard focus remain shared.",
+      "Saved light/dark appearance and reduced-motion preferences apply to setup and guidance."
+    ],
+    "rules": [
+      {
+        "name": "The Theme Rule",
+        "body": "Use semantic surface and text properties so saved appearance continues to work; use fixed wire colors only where the implementation does.",
+        "section": "colors"
+      },
+      {
+        "name": "The Motion Preference Rule",
+        "body": "Setup reveals and guide spotlight transitions are removed when reduced motion is requested; the content and actions remain. Exact timings and easing values are recorded in the sidecar.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do use the semantic theme properties for surface, text, border and error colors.",
+      "Do retain the existing One More Prompt logo and Phosphor icon system.",
+      "Do preserve visible keyboard focus and the reduced-motion rules of each component.",
+      "Do keep setup content scrollable while its footer stays available."
+    ],
+    "donts": [
+      "Don't replace the approved orange, paper and ink appearance when adding a surface.",
+      "Don't turn component-specific measurements into requirements for unrelated screens.",
+      "Don't introduce a second product icon library."
+    ]
+  }
+}

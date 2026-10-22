@@ -1,0 +1,18 @@
+{
+  "buildPath": "code",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "src/index.css"
+        ],
+        "createdAt": "2026-10-14T07:35:38.523Z",
+        "reason": "Agent review: header-prompt-context-parent appears only in CSS and has no callers in the current navigation; this dormant selector does not animate any rendered element."
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+.prompt-project-scope { --prompt-pin-left: 0px; }
+.prompt-project-pinned-sessions { padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid var(--border); }
+.prompt-project-pinned-identity { cursor: grab; touch-action: none; user-select: none; }
+.prompt-project-pinned-session[data-pin-dragging] .prompt-project-pinned-identity { cursor: grabbing; opacity: .5; }
+.prompt-project-pinned-session[data-pin-target] .prompt-project-pinned-identity { box-shadow: inset 0 0 0 1px var(--wire-orange); background: color-mix(in srgb, var(--wire-orange) 10%, var(--card)); }
+
+.prompt-project-pinned-children { max-height: min(14rem, 30vh); overflow-y: auto; }
+.prompt-project-pinned-projects { padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid var(--border); }
+.prompt-project-scope [data-pinned] > .prompt-project-entry { cursor: grab; touch-action: none; user-select: none; }
+.prompt-project-scope [data-pin-dragging] > .prompt-project-entry { cursor: grabbing; opacity: .5; }
+.prompt-project-scope [data-pin-target] > .prompt-project-entry { box-shadow: inset 0 0 0 1px var(--wire-orange); background: color-mix(in srgb, var(--wire-orange) 10%, var(--card)); }

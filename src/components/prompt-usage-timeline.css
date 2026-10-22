@@ -1,0 +1,13 @@
+.prompt-timeline-focus-control { border-radius: 6px; padding: 6px 9px; color: var(--muted-foreground); font-size: 11px; transition: background-color 200ms; }
+.prompt-timeline-focus-control:hover { background: var(--muted); color: var(--foreground); }
+.prompt-timeline-focus-control:focus-visible { outline: 1px solid var(--muted-foreground); outline-offset: 2px; }
+
+.prompt-timeline-workspace { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+.prompt-timeline-chart-pane { display: flex; flex: 1; flex-direction: column; min-width: 0; min-height: 0; }
+.prompt-timeline-chart-pane:empty { display: none; }
+.prompt-reader-overlay { position: absolute; inset: 0 0 0 auto; z-index: 20; width: min(56rem, 92%); max-width: 92%; min-height: 0; overflow: hidden; background: var(--card); border-left: 1px solid var(--border); box-shadow: -24px 0 60px -36px rgba(0,0,0,.72); }
+.prompt-reader-overlay[data-state="closing"] { pointer-events: none; }
+@media (max-width: 760px) { .prompt-reader-overlay { width: 100%; max-width: 100%; } }
+
+.prompt-timeline-filter-strip { padding: 8px 16px; }
+.prompt-timeline-footer { padding: 8px 16px; }

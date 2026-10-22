@@ -1,0 +1,40 @@
+# lutin.yml — DMG packaging config for One More Prompt.
+project:
+  name: One More Prompt
+  bundleId: com.alanchill.onemoreprompt
+app:
+  path: ./src-tauri/target/release/bundle/macos/One More Prompt.app
+output:
+  directory: ./src-tauri/target/release/bundle/lutin
+  dmgName: One-More-Prompt-${version}.dmg
+  volumeName: One More Prompt
+window:
+  width: 680
+  height: 420
+  iconSize: 96
+background:
+  type: solid
+  colorA: '#FFFFFF'
+  scale: 2
+items:
+  - type: app
+    id: app
+    x: 226
+    y: 210
+    label: One More Prompt
+  - type: applications
+    id: applications
+    x: 453
+    y: 210
+    label: Applications
+decorations: []
+signing:
+  enabled: true
+  # The local release script replaces this only in its temporary config copy.
+  identity: 'RELEASE_BLOCKED_SET_APPLE_SIGNING_IDENTITY'
+  hardenedRuntime: true
+  signDmg: true
+notarization:
+  enabled: true
+  profile: lutin-notary
+  staple: true

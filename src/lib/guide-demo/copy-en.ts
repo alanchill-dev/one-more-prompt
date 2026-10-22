@@ -1,0 +1,45 @@
+import type { GuideCopy } from "./copy-types"
+
+export const EN_GUIDE_COPY: GuideCopy = {
+  stages: ["Understand Usage", "Find Your Work", "Compare Times"],
+  steps: [
+    { title: "Read Today’s Activity", body: "Start with today’s hourly usage to see when your work was concentrated.", points: [["Hours", "Today’s activity hour by hour"], ["Height", "Tokens used"], ["Colors", "Model mix"]] },
+    { title: "Your Remaining Allowance", body: "These are your Codex account limits, separate from the local activity chart above.", points: [["Session", "Allowance left in the short window"], ["Weekly", "Share of this week’s allowance left"], ["Reset Time", "When that allowance renews"]] },
+    { title: "Choose “30 Days”", body: "Zoom out from today to the past month and compare daily usage and model mix." },
+    { title: "Try “Model Palette”", body: "Open the palette at the chart’s upper right, choose a slot, change its color, then press Apply.", points: [["Live Preview", "Changes appear on the chart immediately"], ["Apply", "Keeps the colors for this practice session"]] },
+    { title: "Switch To “API Valuation”", body: "Convert the same Tokens to money using each model’s API prices.", points: [["Estimated Amount", "A usage comparison, not your actual bill"], ["Chart", "Bar height now shows API valuation"]] },
+    { title: "Find A Day Worth Revisiting", body: "The tallest bar has the largest value in the current chart mode." },
+    { title: "Click “Projects”", body: "Bring the selected day into Projects." },
+    { title: "Find Details From Left To Right", body: "Choose a conversation, then a Prompt, then read its details.", points: [["Left", "Projects and Session conversations"], ["Middle", "Selected conversation’s summary and Prompts"], ["Right", "Details of the Prompt you select"]] },
+    { title: "Select “{featuredSession}”", body: "See the Prompts in this conversation." },
+    { title: "Project Above, Conversation Below", body: "Each row totals its own full history; dates filter only the Prompt list below.", points: [["Project", "All conversations in this project"], ["Session", "Only the selected conversation"], ["Three Metrics", "Tokens, cumulative weekly quota spent, and runtime"]] },
+    { title: "Select The 18M Prompt", body: "It begins “{featuredPromptLead}”." },
+    { title: "Revisit Your Original Instruction", body: "Read the complete Prompt you sent, or copy it to use again." },
+    { title: "When It Started And How Long It Ran", body: "Start time is when you sent the Prompt. Runtime adds only recorded active time.", points: [["Start Time", "Locate this Prompt in time"], ["Runtime", "Unrecorded or interrupted time is excluded"]] },
+    { title: "Read This Prompt’s Usage", body: "Start with the total, then input and output. Cache reads and reasoning are included within them.", points: [["Total", "Input plus output across all agents"], ["Input / Cache", "Input already includes cache reads"], ["Output / Reasoning", "Output already includes reasoning Tokens"]] },
+    { title: "See Which Agents Shared The Work", body: "Main and sub-agent usage is already included in the total above. Do not add it again.", points: [["Main Agent", "55% of this Prompt’s usage"], ["Sub Agent", "Two sub-agents, at 25% and 20%"], ["Shares", "All three agents add up to 100%"]] },
+    { title: "Click “Timeline” Above", body: "Compare conversations on the same selected day." },
+    { title: "Read The Timeline From 1 To 4", body: "Choose which records to show above, then compare when each conversation happened below.", points: [["1 Filters", "Choose dates, models, projects, or search instructions"], ["2 Time Map", "The orange frame marks the time shown below"], ["3 Conversations", "One Session per row, with its project"], ["4 Prompt Marks", "Position is submission time; height is Token usage"]] },
+    { title: "Drag The Frame’s Middle Left Or Right", body: "The plot below follows the time range." },
+    { title: "Drag The Right Triangle Left Or Right", body: "Change the range to zoom the plot below in or out." },
+    { title: "Select The Highlighted “{featuredSession}” Record", body: "See this Prompt’s instruction and usage.", points: [["Group Numbers", "Several Prompts"], ["Line Height", "Tokens, not duration"]] },
+  ],
+  chrome: {
+    exit: "Exit Guide", skip: "Skip Guide", close: "Close Guide", retry: "Retry This Step",
+    failure: "This step's target is unavailable. Try again or exit the guide.", completedTask: "Completed",
+    panKeyboard: "Keyboard: focus the range, then press ← or →", zoomKeyboard: "Keyboard: focus the right handle, then press ← or →",
+    backToOpening: "Back to Introduction", previous: "Previous", finish: "Finish Guide", continue: "Continue", next: "Next",
+    demoMode: "Demo Mode", demoDetail: "Practice only; your previous workspace is restored on exit", demoAccount: "Demo Account",
+  },
+  welcome: {
+    kicker: "Interactive Guide", range: "3 Stages · 20 Steps", title: "From Usage to Your Work",
+    body: "Practice Overview, Projects, and Timeline with sample data. Your own records stay unchanged.",
+    stageDetails: ["Read charts and allowances to find a day worth revisiting.", "Connect conversations and Prompts to the work and its usage.", "Move and zoom to compare work happening at the same time."],
+    stepsUnit: "steps", explore: "Explore on My Own", start: "Start Guide",
+  },
+  finishCard: {
+    kicker: "3 Stages · Completed", title: "Guide Complete",
+    body: "Find a period in Overview, then explore the details in Projects or Timeline. Your own work history is ready when you return.",
+    route: ["Understand Usage", "Find Your Work", "Compare Times"], returnToWorkspace: "Return to My Workspace",
+  },
+}

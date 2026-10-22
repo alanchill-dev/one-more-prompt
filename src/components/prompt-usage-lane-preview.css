@@ -1,0 +1,34 @@
+.prompt-session-preview.prompt-session-preview-detail {
+  padding: 0;
+  gap: 12px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+.prompt-session-preview-inspector { flex: 1; min-height: 0; }
+.prompt-session-preview-inspector > aside { overscroll-behavior: contain; }
+.prompt-session-preview-detail p {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: initial;
+}
+.prompt-session-preview-detail [data-testid="prompt-usage-inspector-prompt-block"] > p {
+  color: var(--foreground);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.prompt-session-preview-detail .prompt-session-preview-browser {
+  flex: none;
+  min-height: 58px;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border: 1px solid color-mix(in srgb, var(--wire-orange) 38%, transparent);
+}
+.prompt-session-preview-detail .prompt-session-preview-browser:hover {
+  border-color: color-mix(in srgb, var(--wire-orange) 60%, transparent);
+}
+.prompt-session-preview-detail .prompt-session-preview-browser:focus-visible {
+  outline: none;
+}

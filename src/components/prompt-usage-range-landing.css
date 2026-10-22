@@ -1,0 +1,47 @@
+/* Preserve measurable geometry while the traveling date owns the filter. */
+[data-drilldown-filter="target"] { visibility: hidden; }
+
+.prompt-range-stamp {
+  display: none;
+  position: absolute;
+  top: 3px;
+  left: 34px;
+  right: 8px;
+  color: color-mix(in srgb, var(--page-accent) 65%, var(--foreground));
+  text-align: left;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+[data-drilldown-range="landing"] .prompt-timeline-filter-control {
+  border-radius: 9px;
+  animation: prompt-range-confirm-surface 3000ms ease-out both;
+}
+[data-drilldown-range="landing"] .prompt-range-stamp {
+  display: block;
+  animation: prompt-range-confirm-stamp 3000ms ease-out both;
+}
+[data-drilldown-range="landing"] .prompt-range-date {
+  animation: prompt-range-confirm-date 3000ms cubic-bezier(.2, 0, 0, 1) both;
+}
+[data-drilldown-range="landing"] .prompt-range-calendar {
+  animation: prompt-range-confirm-calendar 3000ms ease-out both;
+}
+@keyframes prompt-range-confirm-surface {
+  0%, 100% { background-color: transparent; }
+  16%, 76% { background-color: color-mix(in srgb, var(--page-accent) 20%, var(--background)); }
+}
+@keyframes prompt-range-confirm-stamp {
+  0%, 100% { opacity: 0; transform: translateY(-3px); }
+  16%, 76% { opacity: 1; transform: translateY(0); }
+}
+@keyframes prompt-range-confirm-date {
+  0%, 100% { transform: translateY(0); }
+  16%, 76% { transform: translateY(6px); }
+}
+@keyframes prompt-range-confirm-calendar {
+  0%, 100% { color: var(--muted-foreground); transform: scale(1); }
+  16%, 76% { color: var(--page-accent); transform: scale(1.15); }
+}

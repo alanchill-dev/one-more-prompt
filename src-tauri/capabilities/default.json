@@ -1,0 +1,25 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the app windows (tray panel, onboarding setup, and what's-new)",
+  "windows": ["main", "setup", "whats-new"],
+  "permissions": [
+    "core:default",
+    "core:tray:default",
+    "core:image:default",
+    "core:window:allow-close",
+    "core:window:allow-set-size",
+    "core:window:allow-outer-size",
+    "core:window:allow-inner-size",
+    "core:window:allow-scale-factor",
+    "core:window:allow-start-dragging",
+    "core:window:allow-start-resize-dragging",
+    "opener:default",
+    "store:default",
+    "global-shortcut:default",
+    "autostart:default",
+    "core:menu:default",
+    "notification:default",
+    "log:default"
+  ]
+}

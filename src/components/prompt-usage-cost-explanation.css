@@ -1,0 +1,75 @@
+/* The formula and supplied amounts remain readable inside a bounded portal. */
+.cost-explanation {
+  width: 480px;
+  max-width: calc(100vw - 24px);
+  max-height: min(640px, var(--available-height, calc(100dvh - 24px)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: 0 16px 48px #0003, 0 2px 8px #0001;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.cost-explanation-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.cost-explanation-heading h2 { padding-top: 5px; font-size: 17px; font-weight: 650; line-height: 1.5; }
+.cost-explanation-close { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px; color: var(--muted-foreground); }
+.cost-explanation-close:hover { background: var(--muted); color: var(--foreground); }
+.cost-explanation-close:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.cost-explanation-total { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; }
+.cost-explanation-total span { font-weight: 600; }
+.cost-explanation-total p { margin-top: 4px; color: var(--muted-foreground); font-size: 13px; }
+.cost-explanation-total strong { font-size: 28px; font-weight: 650; letter-spacing: -.04em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cost-explanation-total-reading { display: flex; align-items: baseline; gap: 10px; }
+.cost-explanation-currency { flex: none; color: var(--wire-orange); font-size: 10px; font-weight: 600; letter-spacing: .14em; }
+.cost-explanation-method { padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.cost-explanation-formula { font-size: 14px; font-weight: 600; line-height: 1.65; }
+.cost-explanation-method > p + p { margin-top: 7px; color: var(--muted-foreground); font-size: 13px; }
+.cost-explanation-fees { padding-top: 3px; }
+.cost-explanation-fee { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; column-gap: 20px; padding: 12px 0; }
+.cost-explanation-fee + .cost-explanation-fee { border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent); }
+.cost-explanation-fee dt > span { font-weight: 600; }
+.cost-explanation-fee dt p { margin-top: 3px; color: var(--muted-foreground); font-size: 11px; line-height: 1.55; }
+.cost-explanation-fee dd { font-weight: 600; font-variant-numeric: tabular-nums; }
+.cost-explanation-incomplete { padding: 10px 0; color: var(--muted-foreground); }
+.cost-explanation-reference { border-top: 1px solid var(--border); padding-top: 12px; color: var(--muted-foreground); font-size: 12px; line-height: 1.65; }
+.cost-explanation { transition: opacity 140ms ease, transform 140ms ease; }
+.cost-explanation[data-starting-style] { opacity: 0; transform: translateY(3px); }
+.cost-explanation[data-ending-style] { opacity: 0; }
+.prompt-summary-api-container { display: flex; flex: 1; min-width: 0; }
+.prompt-summary-api-container > .prompt-summary-api { flex: none; max-width: none; }
+.cost-model-guide { padding: 18px 0 10px; }
+.cost-model-guide p { margin-top: 4px; color: var(--muted-foreground); font-size: 12px; }
+.cost-model-calculation { padding: 16px 0; border-top: 1px solid var(--border); }
+.cost-model-calculation h3 { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; font-weight: 650; font-size: 14px; }
+.cost-model-calculation h3 span { overflow-wrap: anywhere; }
+.cost-model-calculation h3 strong { text-align: right; font-size: 15px; font-variant-numeric: tabular-nums; }
+.cost-model-composition { display: flex; height: 10px; margin-top: 14px; overflow: hidden; border-radius: 3px; background: #242321; }
+.cost-model-composition > span, .cost-model-category-key { background: #b73718; }
+.cost-model-composition [data-category="cacheRead"], .cost-model-category-key[data-category="cacheRead"] { background: #82796e; }
+.cost-model-composition [data-category="cacheWrite"], .cost-model-category-key[data-category="cacheWrite"] { background: #a27e50; }
+.cost-model-composition [data-category="output"], .cost-model-category-key[data-category="output"] { background: #30343b; }
+.dark .cost-model-composition > span, .dark .cost-model-category-key { background: #f5572f; }
+.dark .cost-model-composition [data-category="cacheRead"], .dark .cost-model-category-key[data-category="cacheRead"] { background: #d8d2ca; }
+.dark .cost-model-composition [data-category="cacheWrite"], .dark .cost-model-category-key[data-category="cacheWrite"] { background: #c0a186; }
+.dark .cost-model-composition [data-category="output"], .dark .cost-model-category-key[data-category="output"] { background: #fff; }
+.cost-model-category-key { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-inline-end: 7px; }
+.cost-model-category { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding-top: 14px; }
+.cost-model-category dt > span { font-size: 14px; font-weight: 600; }
+.cost-model-operands { margin-top: 3px; font-size: 14px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cost-model-operands > span { white-space: nowrap; }
+.cost-model-category dd { align-self: end; font-size: 14px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cost-model-issue { display: flex; gap: 8px; align-items: start; margin-top: 12px; font-size: 13px; }
+.cost-model-issue svg { flex-shrink: 0; margin-top: 2px; }
+.cost-model-observed { margin-top: 12px; font-size: 12px; color: var(--muted-foreground); }
+.cost-model-sum { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 16px 0; border-top: 1px solid var(--border); }
+.cost-model-sum strong { text-align: right; font-size: 17px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+:root.dark:has(.app-main-surface[data-active-view="prompt-usage"][data-prompt-usage-view-mode="hierarchy"]) .cost-explanation {
+  --popover: #57534e; --popover-foreground: #fff; --foreground: #fff; --muted-foreground: #d8d2ca; --border: rgb(244 236 224 / .17);
+}
+@media (max-width: 600px) { .cost-model-category { grid-template-columns: minmax(0, 1fr); gap: 4px; } .cost-model-category dd { text-align: left; } }
+@media (prefers-reduced-motion: reduce) { .cost-explanation { transition: none; } }

@@ -1,0 +1,247 @@
+.prompt-session-lanes {
+  --lane-label-width: clamp(112px, 30%, 180px);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+}
+.prompt-session-axis, .prompt-session-lane {
+  display: grid;
+  grid-template-columns: var(--lane-label-width) minmax(0, 1fr);
+  column-gap: 24px;
+  padding-right: 24px;
+}
+.prompt-session-axis {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  height: 58px;
+  align-items: center;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 46%, transparent);
+}
+.prompt-session-axis-label { min-width: 0; padding-left: 9px; }
+.prompt-session-heading { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.prompt-session-axis-label h2 { min-width: 0; color: var(--foreground); font-size: 13px; font-weight: 650; letter-spacing: -.015em; }
+.prompt-session-axis-label h2 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prompt-session-axis-label p { margin-top: 3px; color: var(--muted-foreground); font-size: 10px; font-weight: 500; white-space: nowrap; }
+.prompt-session-info { display: grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%; color: var(--muted-foreground); transition: color 250ms ease, background-color 250ms ease; }
+.prompt-session-info:hover, .prompt-session-info:focus-visible { color: var(--foreground); background: var(--muted); }
+.prompt-session-track { position: relative; min-width: 0; }
+.prompt-session-ticks { height: 24px; }
+.prompt-session-ticks > span {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  letter-spacing: .025em;
+}
+.prompt-session-tick-date { position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); font-size: 9px; line-height: 12px; }
+.prompt-session-ticks > [data-edge="start"] .prompt-session-tick-date { left: 0; transform: none; }
+.prompt-session-ticks > [data-edge="end"] .prompt-session-tick-date { left: auto; right: 0; transform: none; }
+.prompt-session-ticks > span::after { content: ""; position: absolute; left: 50%; bottom: -12px; width: 1px; height: 5px; background: color-mix(in srgb, var(--muted-foreground) 44%, transparent); }
+.prompt-session-ticks > [data-edge="start"]::after { left: 0; }
+.prompt-session-ticks > [data-edge="end"]::after { left: auto; right: 0; }
+.prompt-session-ticks > [data-edge="start"] { transform: none; }
+.prompt-session-ticks > [data-edge="end"] { transform: translateX(-100%); }
+.prompt-session-ticks button { min-height: 28px; margin-top: -5px; padding: 5px 3px; border-radius: 4px; color: inherit; transition: background-color 250ms ease, color 250ms ease; }
+.prompt-session-ticks button:hover { color: var(--foreground); background: var(--muted); }
+.prompt-session-lanes-scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-gutter: stable; direction: rtl; }
+.prompt-session-lanes-scroll > * { direction: ltr; }
+.prompt-session-lane { position: relative; height: 70px; transition: opacity 320ms ease; }
+.prompt-session-lane > .prompt-session-track { background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--muted) 35%, transparent), transparent 80%); }
+.prompt-session-lane[data-muted] { opacity: .18; }
+.prompt-session-lane[data-muted]:hover, .prompt-session-lane[data-muted]:focus-within { opacity: .55; }
+.prompt-session-identity {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  min-height: 52px;
+  gap: 3px;
+  min-width: 0;
+  padding: 7px 9px;
+  border-radius: 7px;
+  text-align: left;
+  transition: background-color 320ms ease, color 320ms ease;
+}
+.prompt-session-identity > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; font-weight: 600; letter-spacing: -.012em; color: var(--foreground); }
+.prompt-session-identity > small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--muted-foreground); }
+.prompt-session-identity:hover, .prompt-session-identity[aria-pressed="true"] { background: color-mix(in srgb, var(--muted) 68%, transparent); }
+.prompt-session-identity[aria-pressed="true"] { background: color-mix(in srgb, var(--wire-orange) 16%, var(--card)); box-shadow: inset 3px 0 var(--wire-orange); }
+.prompt-session-identity[aria-pressed="true"] > small { color: var(--foreground); }
+.prompt-session-lane[data-selected] .prompt-session-event > span { background: color-mix(in srgb, var(--event-color, var(--muted-foreground)) 75%, white); }
+.prompt-session-grid { position: absolute; inset: 0; pointer-events: none; }
+.prompt-session-grid i { position: absolute; height: 100%; width: 1px; background: linear-gradient(transparent, color-mix(in srgb, var(--border) 68%, transparent) 32%, color-mix(in srgb, var(--border) 68%, transparent) 68%, transparent); }
+.prompt-session-grid i[data-minor] { top: 15px; bottom: 15px; height: auto; background: linear-gradient(transparent, color-mix(in srgb, var(--border) 24%, transparent), transparent); }
+.prompt-session-baseline { position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, color-mix(in srgb, var(--border) 38%, transparent), color-mix(in srgb, var(--muted-foreground) 32%, transparent) 50%, color-mix(in srgb, var(--border) 38%, transparent)); }
+.prompt-session-event {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: var(--session-event-target);
+  height: var(--session-event-target);
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.prompt-session-event > span {
+  position: relative;
+  width: 2px;
+  height: var(--event-height, 10px);
+  border-radius: 1px;
+  pointer-events: none;
+  background: var(--event-color, var(--muted-foreground));
+  transition: background-color 150ms ease;
+}
+.prompt-session-event:is(:hover, [data-highlighted], :focus-visible) > span,
+.prompt-session-lane[data-selected] .prompt-session-event:is(:hover, [data-highlighted], :focus-visible) > span { background: var(--wire-orange); }
+.prompt-session-event:is(:hover, [data-highlighted], :focus-visible) > span::after {
+  content: ""; position: absolute; left: 50%; transform: translateX(-50%); width: 6px; height: 4px; background: var(--wire-orange); pointer-events: none;
+}
+.prompt-session-event:is(:hover, [data-highlighted], :focus-visible) > span::after { top: calc(100% + 3px); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.prompt-session-identity:focus-visible, .prompt-session-ticks button:focus-visible, .prompt-session-info:focus-visible { outline: 2px solid var(--muted-foreground); outline-offset: -2px; }
+.prompt-session-lanes-empty { padding: 25px 9px; font-size: 12px; color: var(--muted-foreground); }
+@media (max-width: 640px) {
+  .prompt-session-lanes { --lane-label-width: 118px; }
+  .prompt-session-axis, .prompt-session-lane { column-gap: 15px; padding-right: 24px; }
+}
+
+.prompt-session-lanes { position: relative; }
+.prompt-session-track { touch-action: pan-y; }
+.prompt-session-track[data-dragging] { cursor: grabbing; }
+.prompt-session-events { position: absolute; inset: 0; }
+.prompt-session-event { width: 2px; height: 44px; border-radius: 0; }
+.prompt-session-event > span { pointer-events: none; }
+.prompt-session-event:focus-visible { outline: none; }
+
+.prompt-session-event > small { pointer-events: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--foreground); font-size: 10px; line-height: 12px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.prompt-session-event > svg { position: absolute; top: 4px; left: 6px; pointer-events: none; }
+.prompt-session-preview-region { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.prompt-session-preview-bridge { position: absolute; pointer-events: auto; }
+.prompt-session-preview { position: absolute; pointer-events: auto; text-align: left; height: 158px; padding: 15px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); box-shadow: 0 14px 32px #0003; display: flex; flex-direction: column; gap: 6px; transform-origin: center; animation: prompt-preview-enter 260ms cubic-bezier(.16,1,.3,1) both; }
+.prompt-session-preview-region[data-open="false"] { pointer-events: none; }
+.prompt-session-preview-region[data-open="false"] .prompt-session-preview { animation: prompt-preview-exit 240ms cubic-bezier(.4,0,1,1) both; pointer-events: none; }
+.prompt-session-preview-region[data-open="false"] .prompt-session-preview-bridge { pointer-events: none; }
+.prompt-session-preview-time, .prompt-session-preview-model { font-size: 11px; color: var(--muted-foreground); }
+.prompt-session-preview strong { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prompt-session-preview p { color: var(--muted-foreground); font-size: 12px; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.prompt-session-preview:focus-visible { outline: 2px solid var(--foreground); outline-offset: -3px; }
+@keyframes prompt-preview-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes prompt-preview-exit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(3px) scale(.985); } }
+
+
+.prompt-session-navigation { flex: 0 0 auto; padding: 2px 14px 0; border-bottom: 1px solid var(--border); }
+.prompt-session-navigation-dates { position: relative; height: 30px; margin-inline: 0; font-size: 11px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.prompt-session-navigation-dates span { position: absolute; bottom: 8px; transform: translateX(-50%); white-space: nowrap; }
+.prompt-session-navigation-dates span[data-first] { transform: none; }
+.prompt-session-navigation-dates span::after { content: ""; position: absolute; top: 100%; left: 50%; height: 5px; width: 1px; background: var(--border); }
+.prompt-session-navigation-dates span[data-first]::after { left: 0; }
+.prompt-session-navigation-map { position: relative; height: 28px; min-width: 0; background: color-mix(in srgb, var(--muted) 35%, transparent); border-radius: 4px; cursor: grab; touch-action: none; user-select: none; }
+.prompt-session-navigation-marks { position: absolute; inset: 5px 0; overflow: hidden; pointer-events: none; }
+.prompt-session-navigation-marks i { position: absolute; width: 1px; height: 100%; background: color-mix(in srgb, var(--muted-foreground) 50%, transparent); }
+.prompt-session-navigation-marks i[data-muted] { opacity: .04; }
+.prompt-session-navigation-marks i[data-selected] { background: var(--wire-orange); z-index: 1; }
+.prompt-session-navigation-window { position: absolute; inset-block: 0; border: 1px solid color-mix(in srgb, var(--wire-orange) 65%, var(--border)); background: color-mix(in srgb, var(--wire-orange) 10%, transparent); border-radius: 4px; pointer-events: none; }
+.prompt-session-navigation-map:focus-visible { outline: 2px solid var(--muted-foreground); outline-offset: 3px; }
+
+.prompt-session-preview-body { display: flex; min-height: 0; flex: 1; flex-direction: column; gap: 6px; text-align: left; overflow: hidden; }
+.prompt-session-preview-browser { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 8px; min-height: 38px; margin-top: auto; border-top: 1px solid var(--border); padding-top: 8px; font-size: 11px; font-weight: 600; color: var(--foreground); }
+.prompt-session-preview-body:focus-visible, .prompt-session-preview-browser:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; }
+
+.prompt-session-navigation-dates span[data-last] { transform: translateX(-100%); }
+.prompt-session-navigation-dates span[data-last]::after { left: 100%; }
+
+.prompt-session-navigation-dates[data-hourly] span[data-first],
+.prompt-session-navigation-dates[data-hourly] span[data-last] { transform: translateX(-50%); }
+.prompt-session-navigation-dates[data-hourly] span[data-first]::after,
+.prompt-session-navigation-dates[data-hourly] span[data-last]::after { left: 50%; }
+
+.prompt-session-chart-viewport { position: relative; display: flex; flex: 1; min-height: 0; overflow: hidden; }
+.prompt-session-activity-hint { position: absolute; left: calc(var(--lane-label-width) + 24px); right: 24px; z-index: 3; pointer-events: none; display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: opacity 150ms ease; }
+.prompt-session-activity-hint[data-direction="above"] { top: calc(62px + var(--pinned-lane-count, 0) * 70px); }
+.prompt-session-activity-hint[data-direction="below"] { bottom: 4px; }
+.prompt-session-activity-hint[data-visible] { visibility: visible; opacity: 1; }
+.prompt-session-activity-hint button { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 2px 12px; border: 1px solid color-mix(in srgb, var(--wire-orange) 42%, var(--border)); border-radius: 999px; font-size: 11px; font-weight: 600; color: var(--foreground); background: color-mix(in srgb, var(--wire-orange) 10%, var(--card)); box-shadow: 0 2px 10px color-mix(in srgb, var(--wire-orange) 12%, transparent); transition: background-color 180ms ease, box-shadow 180ms ease; }
+.prompt-session-activity-hint button:hover { background: color-mix(in srgb, var(--wire-orange) 18%, var(--card)); box-shadow: 0 2px 14px color-mix(in srgb, var(--wire-orange) 24%, transparent); }
+.prompt-session-activity-hint button:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
+
+.prompt-session-activity-hint svg { color: var(--wire-orange); }
+.prompt-session-lanes-scroll { scrollbar-width: auto; scrollbar-color: auto; }
+@supports not selector(::-webkit-scrollbar) { .prompt-session-lanes-scroll { scrollbar-color: color-mix(in srgb, var(--foreground) 48%, var(--card)) color-mix(in srgb, var(--muted) 65%, var(--card)); } }
+.prompt-session-lanes-scroll::-webkit-scrollbar { width: 12px; }
+.prompt-session-lanes-scroll::-webkit-scrollbar-track { background: color-mix(in srgb, var(--muted) 65%, var(--card)); border-radius: 8px; }
+.prompt-session-lanes-scroll::-webkit-scrollbar-thumb { min-height: 36px; border: 3px solid transparent; border-radius: 8px; background: color-mix(in srgb, var(--foreground) 48%, var(--card)); background-clip: padding-box; }
+.prompt-session-lanes-scroll::-webkit-scrollbar-thumb:hover { background-color: color-mix(in srgb, var(--foreground) 70%, var(--card)); }
+.prompt-session-activity-hint[data-visible] button { animation: prompt-activity-reveal 700ms ease-out both; }
+.prompt-session-activity-hint[data-direction="above"] { --hint-nudge: -2px; }
+.prompt-session-activity-hint[data-direction="below"] { --hint-nudge: 2px; }
+.prompt-session-activity-hint[data-visible] svg { animation: prompt-activity-direction 550ms ease-in-out 2; }
+@keyframes prompt-activity-reveal { from { transform: scale(.97); box-shadow: 0 0 18px color-mix(in srgb, var(--wire-orange) 40%, transparent); } to { transform: scale(1); box-shadow: 0 2px 10px color-mix(in srgb, var(--wire-orange) 12%, transparent); } }
+@keyframes prompt-activity-direction { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(var(--hint-nudge)); } }
+
+.prompt-session-label { display: flex; align-items: center; min-width: 0; }
+.prompt-session-label .prompt-session-identity { flex: 1; margin-left: 4px; }
+
+
+/* Keep the pin rail inside the full-width chart instead of widening its parents. */
+.prompt-session-lanes-scroll { padding-left: 20px; }
+.prompt-session-activity-hint { left: calc(var(--lane-label-width) + 44px); }
+
+/* Keep pinned rows below the time axis while the remaining rows scroll beneath. */
+.prompt-session-lane[data-pinned] { position: sticky; top: calc(58px + var(--pinned-row-index) * 70px); z-index: 2; }
+.prompt-session-lane[data-pinned]::before { content: ""; position: absolute; inset: 0 0 0 -20px; z-index: -1; background: var(--card); pointer-events: none; }
+.prompt-session-lane[data-pinned][data-muted] { opacity: 1; }
+.prompt-session-lane[data-pinned][data-muted] > div { opacity: .18; transition: opacity 320ms ease; }
+.prompt-session-lane[data-pinned][data-muted]:is(:hover, :focus-within) > div { opacity: .55; }
+
+.prompt-session-axis::before { content: ""; position: absolute; inset: 0 100% 0 -20px; background: var(--card); pointer-events: none; }
+
+.prompt-session-lane[data-pinned] .prompt-session-identity { cursor: grab; touch-action: none; user-select: none; }
+.prompt-session-lane[data-pin-dragging] .prompt-session-identity { cursor: grabbing; opacity: .5; }
+.prompt-session-lane[data-pin-target] .prompt-session-identity { box-shadow: inset 0 0 0 1px var(--wire-orange); background: color-mix(in srgb, var(--wire-orange) 10%, var(--card)); }
+
+.prompt-navigation-interaction { position: relative; padding-block: 4px 52px; }
+.prompt-navigation-handle { position: absolute; top: -4px; width: 36px; height: 44px; transform: translateX(-50%); touch-action: none; cursor: ew-resize; display: grid; place-items: center; }
+.prompt-navigation-resize-icon { color: var(--wire-orange); pointer-events: none; }
+.prompt-navigation-handle-pan { top: 40px; width: max-content; min-width: 104px; height: 44px; padding: 0 8px; display: grid; place-items: center; cursor: grab; transform: translateX(-50%); border-radius: 8px; }
+.prompt-navigation-handle-pan > .prompt-navigation-capsule { display: flex; align-items: center; gap: 9px; width: auto; height: auto; padding: 5px 10px; border-radius: 7px; color: var(--foreground); background: color-mix(in srgb, var(--wire-orange) 11%, var(--card)); border: 1px solid color-mix(in srgb, var(--wire-orange) 38%, var(--border)); font-size: 11px; line-height: 16px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.prompt-navigation-capsule > i { display: block; width: 2px; height: 10px; flex: none; border-radius: 1px; background: var(--wire-orange); }
+.prompt-navigation-capsule > output { text-align: center; }
+.prompt-navigation-handle-pan:is(:hover, :focus-visible) > .prompt-navigation-capsule { border-color: var(--wire-orange); background: color-mix(in srgb, var(--wire-orange) 16%, var(--card)); }
+.prompt-navigation-handle:active { cursor: grabbing; }
+.prompt-navigation-handle:focus-visible { outline: 2px solid var(--wire-orange); outline-offset: -2px; border-radius: 5px; }
+.prompt-navigation-handle-start { transform: translateX(-100%); }
+.prompt-navigation-handle-end { transform: none; }
+.prompt-navigation-handle-start > .prompt-navigation-resize-icon { justify-self: end; margin-right: 1px; }
+.prompt-navigation-handle-end > .prompt-navigation-resize-icon { justify-self: start; margin-left: 1px; }
+.prompt-session-track:not(.prompt-session-ticks) { cursor: grab; }
+.prompt-timeline-horizontal-scroll { width: calc(100% - var(--lane-label-width) - 48px); margin: 6px 24px 4px auto; height: var(--omp-scrollbar-size); position: relative; border-radius: var(--omp-scrollbar-radius); background: var(--omp-scrollbar-track); touch-action: none; cursor: pointer; }
+.prompt-timeline-horizontal-scroll > span { position: absolute; inset-block: var(--omp-scrollbar-inset); max-width: 100%; border-radius: var(--omp-scrollbar-radius); background: var(--omp-scrollbar-thumb); cursor: grab; }
+.prompt-timeline-horizontal-scroll:is(:hover, :focus-visible) > span { background: var(--omp-scrollbar-thumb-hover); }
+.prompt-timeline-horizontal-scroll:active > span { background: var(--omp-scrollbar-thumb-hover); cursor: grabbing; }
+.prompt-timeline-horizontal-scroll:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.prompt-navigation-handle-start[data-boundary="start"] { transform: none; }
+.prompt-navigation-handle-start[data-boundary="start"] > .prompt-navigation-resize-icon { justify-self: start; margin-left: 1px; margin-right: 0; }
+.prompt-navigation-handle-end[data-boundary="end"] { transform: translateX(-100%); }
+.prompt-navigation-handle-end[data-boundary="end"] > .prompt-navigation-resize-icon { justify-self: end; margin-right: 1px; margin-left: 0; }
+
+.prompt-session-group-summary { flex: none; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 11px; line-height: 1.5; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.prompt-session-group-summary > div { color: var(--foreground); }
+.prompt-session-preview .prompt-session-group-summary > p { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 4px; color: var(--muted-foreground); }
+.prompt-session-group-summary strong { font-weight: 600; color: var(--foreground); }
+
+.prompt-session-event[data-cluster] > span { width: var(--event-width); border-radius: 3px; background: color-mix(in srgb, var(--event-color) 24%, var(--card)); border: 1px solid color-mix(in srgb, var(--event-color) 68%, var(--border)); }
+.prompt-session-event[data-cluster]:is(:hover, [data-highlighted], :focus-visible) > span { background: color-mix(in srgb, var(--wire-orange) 26%, var(--card)); border-color: var(--wire-orange); }
+.prompt-session-preview.prompt-session-preview-summary { padding: 0; }
+.prompt-session-open-group { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin: 10px 16px 14px; padding: 9px 12px; border-radius: 6px; background: var(--foreground); color: var(--background); font-size: 12px; font-weight: 600; }
+.prompt-session-open-group:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

@@ -1,0 +1,109 @@
+.prompt-usage-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.prompt-usage-text p {
+  margin: 0;
+}
+
+.prompt-usage-text > * + *,
+.prompt-usage-text-answer > * + * {
+  margin-top: 0.75em;
+}
+
+.prompt-usage-text-reply {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.prompt-usage-text-question {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+.prompt-usage-text ol,
+.prompt-usage-text ul {
+  padding-left: 1.6em;
+  white-space: normal;
+}
+
+.prompt-usage-text ol {
+  list-style: decimal;
+}
+
+.prompt-usage-text ul {
+  list-style: disc;
+}
+
+.prompt-usage-text li {
+  padding-left: 0.2em;
+  white-space: pre-wrap;
+}
+
+.prompt-usage-text li + li {
+  margin-top: 0.25em;
+}
+
+.prompt-usage-text a {
+  color: var(--wire-orange);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.prompt-usage-text a:focus-visible {
+  border-radius: 0.15em;
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.prompt-usage-text code {
+  border-radius: 0.25em;
+  background: var(--muted);
+  padding: 0.1em 0.3em;
+  font-size: 0.9em;
+}
+
+.prompt-usage-text pre {
+  overflow-x: auto;
+  border-radius: 0.5em;
+  background: var(--muted);
+  padding: 0.75em;
+  white-space: pre;
+}
+
+.prompt-usage-text pre code {
+  padding: 0;
+}
+
+.prompt-usage-text blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 0.75em;
+}
+
+.prompt-usage-text-reference {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.35em;
+  background: var(--muted);
+  padding: 0.05em 0.35em;
+  vertical-align: baseline;
+  white-space: normal;
+}
+
+.prompt-usage-text-reference svg {
+  flex-shrink: 0;
+}
+
+.prompt-usage-text-link-error {
+  margin-left: 0.4em;
+  color: var(--destructive);
+  font-size: 0.85em;
+}

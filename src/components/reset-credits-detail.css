@@ -1,0 +1,98 @@
+.reset-credits-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  margin: -4px -7px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition: background-color 140ms;
+}
+.reset-credits-trigger:hover, .reset-credits-trigger[data-popup-open] { background: var(--muted); }
+.reset-credits-trigger svg { color: var(--muted-foreground); }
+.reset-credits-trigger:focus-visible, .reset-credits-close:focus-visible, .reset-credits-tab:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.reset-credits-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  border-radius: inherit;
+  background: rgb(0 0 0 / 38%);
+  backdrop-filter: blur(3px);
+  transition: opacity 180ms;
+}
+.reset-credits-viewport {
+  position: absolute;
+  inset: 0;
+  z-index: 71;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.reset-credits-popup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 670px;
+  max-width: 100%;
+  height: 510px;
+  max-height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 24%), 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent) inset;
+  outline: none;
+  text-align: left;
+  transition: opacity 180ms, transform 180ms cubic-bezier(.2,.8,.2,1);
+}
+.reset-credits-backdrop[data-starting-style], .reset-credits-backdrop[data-ending-style] { opacity: 0; }
+.reset-credits-popup[data-starting-style], .reset-credits-popup[data-ending-style] { opacity: 0; transform: translateY(6px) scale(.985); }
+.reset-credits-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 28px 28px 20px; }
+.reset-credits-heading h2 { margin: 0; font-size: 23px; line-height: 1.35; font-weight: 650; letter-spacing: -.04em; }
+.reset-credits-heading p { margin: 8px 0 0; font-size: 12px; line-height: 1.6; color: var(--muted-foreground); }
+.reset-credits-close { display: grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0; border-radius: 8px; cursor: pointer; color: var(--muted-foreground); transition: background-color 140ms; }
+.reset-credits-close:hover { color: var(--foreground); background: var(--muted); }
+.reset-credits-tabs { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.reset-credits-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 0 28px 20px; }
+.reset-credits-tab-list { display: flex; padding: 4px; gap: 3px; background: color-mix(in srgb, var(--foreground) 4%, var(--background)); border-radius: 10px; }
+.reset-credits-tab { min-height: 36px; padding: 7px 18px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 550; color: var(--muted-foreground); transition: background-color 140ms, color 140ms; }
+.reset-credits-tab:hover { color: var(--foreground); }
+.reset-credits-tab[data-active] { background: var(--muted); color: var(--foreground); box-shadow: 0 1px 5px rgb(0 0 0 / 9%), 0 0 0 1px color-mix(in srgb, var(--foreground) 4%, transparent) inset; }
+.reset-credits-sort { font-size: 11px; color: var(--muted-foreground); }
+.reset-credits-panel { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 28px 16px; scrollbar-width: thin; }
+.reset-credits-panel[hidden] { display: none; }
+.reset-credits-list { list-style: none; padding: 0; margin: 0; }
+.reset-credits-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: center; min-height: 82px; padding: 17px 0; }
+.reset-credits-row + .reset-credits-row { border-top: 1px solid var(--border); }
+.reset-credits-history-panel .reset-credits-row { min-height: 68px; padding-block: 12px; }
+.reset-credits-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--muted-foreground); background: color-mix(in srgb, var(--foreground) 4%, transparent); border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); }
+.reset-credits-icon[data-event="granted"] { color: var(--foreground); }
+.reset-credits-row-info { min-width: 0; }
+.reset-credits-row-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; line-height: 1.6; font-weight: 550; }
+.reset-credits-earliest { padding: 1px 6px; border-radius: 5px; border: 1px solid color-mix(in srgb, var(--wire-orange) 16%, var(--border)); color: color-mix(in srgb, var(--wire-orange) 40%, var(--foreground)); background: color-mix(in srgb, var(--wire-orange) 5%, transparent); font-size: 10px; font-weight: 500; white-space: nowrap; }
+.reset-credits-row-info p { margin: 4px 0 0; color: var(--muted-foreground); font-size: 11px; line-height: 1.6; }
+.reset-credits-row-date { text-align: right; font-variant-numeric: tabular-nums; }
+.reset-credits-row-date span { display: block; font-size: 14px; font-weight: 550; line-height: 1.6; }
+.reset-credits-row-date small { display: block; margin-top: 2px; font-size: 11px; line-height: 1.6; color: var(--muted-foreground); }
+.reset-credits-footer { display: flex; flex-shrink: 0; justify-content: space-between; gap: 20px; border-top: 1px solid var(--border); padding: 16px 28px; color: var(--muted-foreground); font-size: 10px; line-height: 1.6; }
+.reset-credits-empty { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 160px; height: 100%; gap: 9px; text-align: center; color: var(--muted-foreground); }
+.reset-credits-empty p { max-width: 36ch; font-size: 13px; line-height: 1.7; color: var(--foreground); }
+.reset-credits-empty small { max-width: 40ch; font-size: 12px; line-height: 1.7; }
+.reset-credits-notice { margin: 0 0 8px; font-size: 12px; line-height: 1.7; color: var(--muted-foreground); }
+@media (max-width: 540px) {
+  .reset-credits-viewport { padding: 14px; }
+  .reset-credits-heading { padding: 22px 20px 16px; }
+  .reset-credits-heading h2 { font-size: 21px; }
+  .reset-credits-toolbar { align-items: flex-start; flex-direction: column; gap: 10px; padding: 0 20px 12px; }
+  .reset-credits-panel { padding: 0 20px 14px; }
+  .reset-credits-row { grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+  .reset-credits-row > .reset-credits-icon { display: none; }
+  .reset-credits-footer { padding: 14px 20px; }
+}

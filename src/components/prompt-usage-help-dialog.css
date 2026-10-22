@@ -1,0 +1,29 @@
+.timeline-help-trigger[data-help-hidden] { opacity: 0; visibility: hidden; pointer-events: none; }
+.prompt-help-frame { position: fixed; inset: 0; z-index: 140; pointer-events: none; }
+.prompt-help-backdrop { position: fixed; z-index: 140; overflow: hidden; background: rgb(0 0 0 / .22); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); pointer-events: auto; animation: prompt-help-shade-in 470ms ease both; }
+.prompt-help-backdrop[data-state="closed"] { animation: prompt-help-shade-out 320ms ease both; }
+.prompt-help-frame > .shared-element-morph-shell { z-index: 1; }
+.prompt-help-viewport { position: fixed; inset: 0; pointer-events: none; }
+.prompt-help-panel { position: fixed; display: flex; flex-direction: column; min-height: 0; max-width: calc(100vw - 40px); width: 500px; border: 1px solid transparent; border-radius: 16px; background: var(--surface-help, var(--popover)); color: var(--popover-foreground); box-shadow: 0 20px 64px rgb(0 0 0 / .28); outline: none; overflow: hidden; pointer-events: auto; }
+.prompt-help-panel[data-ready="false"] { visibility: hidden; }
+.prompt-help-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px 0; flex: none; }
+.prompt-help-header h2 { font-size: 18px; font-weight: 650; line-height: 1.4; text-wrap: balance; }
+.prompt-help-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 22px 22px; }
+.prompt-help-content > :first-child { margin-top: 0; }
+.prompt-help-content > :last-child { margin-bottom: 0; }
+@keyframes prompt-help-shade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes prompt-help-shade-out { from { opacity: 1; } to { opacity: 0; } }
+.prompt-time-intro { font-size: 14px; line-height: 1.65; }
+.prompt-time-figure { margin: 18px 0; padding: 12px; border-radius: 10px; background: var(--muted); }
+.prompt-time-figure svg { width: 100%; height: auto; display: block; }
+.prompt-time-figure text { fill: var(--muted-foreground); font-size: 12px; }
+.prompt-time-figure .time-interval { fill: var(--wire-orange); }
+.prompt-time-figure .time-interval-second { fill: color-mix(in srgb, var(--wire-orange) 55%, var(--foreground)); }
+.prompt-time-figure .time-overlap { fill: color-mix(in srgb, var(--wire-orange) 12%, transparent); }
+.prompt-time-figure .time-axis { stroke: var(--border); stroke-width: 1; }
+.prompt-time-figure figcaption { text-align: center; font-size: 18px; font-weight: 600; margin-top: 8px; }
+.prompt-time-emphasis { font-size: 16px; font-weight: 600; line-height: 1.6; margin: 18px 0; }
+.prompt-time-detail { padding-top: 16px; border-top: 1px solid var(--border); }
+.prompt-time-detail h3 { font-size: 14px; font-weight: 650; }
+.prompt-time-detail p, .prompt-time-scope { font-size: 13px; line-height: 1.65; margin: 8px 0 0; }
+.prompt-time-footnote { color: var(--muted-foreground); font-size: 11px; line-height: 1.6; margin: 16px 0 0; }

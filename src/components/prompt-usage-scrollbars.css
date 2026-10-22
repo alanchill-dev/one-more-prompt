@@ -1,0 +1,17 @@
+:root {
+  --omp-scrollbar-size: 12px;
+  --omp-scrollbar-inset: 3px;
+  --omp-scrollbar-radius: 8px;
+  --omp-scrollbar-track: color-mix(in srgb, var(--muted) 65%, var(--card));
+  --omp-scrollbar-thumb: color-mix(in srgb, var(--foreground) 48%, var(--card));
+  --omp-scrollbar-thumb-hover: color-mix(in srgb, var(--foreground) 70%, var(--card));
+}
+.omp-scrollbar { scrollbar-gutter: stable; scrollbar-width: auto; scrollbar-color: auto; }
+@supports not selector(::-webkit-scrollbar) {
+  .omp-scrollbar { scrollbar-color: var(--omp-scrollbar-thumb) var(--omp-scrollbar-track); }
+}
+.omp-scrollbar::-webkit-scrollbar { width: var(--omp-scrollbar-size); height: var(--omp-scrollbar-size); }
+.omp-scrollbar::-webkit-scrollbar-track { background: var(--omp-scrollbar-track); border-radius: var(--omp-scrollbar-radius); }
+.omp-scrollbar::-webkit-scrollbar-thumb { min-height: 36px; min-width: 36px; border: var(--omp-scrollbar-inset) solid transparent; border-radius: var(--omp-scrollbar-radius); background: var(--omp-scrollbar-thumb); background-clip: padding-box; }
+.omp-scrollbar::-webkit-scrollbar-thumb:hover { background-color: var(--omp-scrollbar-thumb-hover); }
+.omp-scrollbar::-webkit-scrollbar-corner { background: var(--omp-scrollbar-track); }
