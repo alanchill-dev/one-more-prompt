@@ -1,4 +1,10 @@
-<p align="center"><img src="public/icon.png" alt="One More Prompt" width="96" height="96"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-light.svg">
+    <img src="assets/brand/logo-light.svg" alt="One More Prompt" width="96" height="96">
+  </picture>
+</p>
 <h1 align="center">One More Prompt</h1>
 <p align="center"><strong>掌握 Codex 用量，也看清每一份工作。</strong></p>
 <p align="center"><a href="README.md">English</a> · <a href="README.zh-TW.md">繁體中文</a> · <strong>简体中文</strong> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a></p>
@@ -41,6 +47,8 @@ One More Prompt 是本地优先的桌面应用，集中展示 **Codex 账号额�
 - **Windows · x64:** 下载未签名的 Windows x64 免安装 ZIP，解压**整个文件夹**后运行 `one-more-prompt.exe`，保留所有附带文件。
 
 Windows 需要 [Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/#download-section)。SmartScreen 或企业策略可能警告或阻止未签名程序。目前不提供 Linux、Intel Mac 或原生 Windows ARM 安装包。
+
+安装或运行 App 只需下载 DMG 或 ZIP。[SHA256SUMS.txt](https://github.com/alanchill-dev/one-more-prompt/releases/download/v1.0.0/SHA256SUMS.txt) 列出文件的哈希值，供需要时核对下载文件是否完整；它不是安装程序，也不是数字签名。
 
 使用 Codex 的标准本地配置登录，即可自动发现已有记录，无需 API Key 或手动复制凭据。首次设置的第一页提供上方九种语言，初始选择为英文；以后也可在设置中更改已保存的语言。
 
