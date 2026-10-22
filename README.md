@@ -1,4 +1,10 @@
-<p align="center"><img src="public/icon.png" alt="One More Prompt" width="96" height="96"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-light.svg">
+    <img src="assets/brand/logo-light.svg" alt="One More Prompt" width="96" height="96">
+  </picture>
+</p>
 <h1 align="center">One More Prompt</h1>
 <p align="center"><strong>Know Your Codex Usage. Keep Your Work in View.</strong></p>
 <p align="center"><strong>English</strong> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a></p>
@@ -41,6 +47,8 @@ One More Prompt is a local-first desktop app for **Codex account limits, Token a
 - **Windows · x64:** Download the unsigned Windows x64 portable ZIP, extract the **whole folder**, and run `one-more-prompt.exe`. Keep its supporting files together.
 
 Windows requires [Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/#download-section). SmartScreen or company policies may warn about or block an unsigned app. Linux, Intel Mac, and native Windows ARM packages are not included.
+
+Only the DMG or ZIP is needed to install or run the app. [SHA256SUMS.txt](https://github.com/alanchill-dev/one-more-prompt/releases/download/v1.0.0/SHA256SUMS.txt) lists hashes for optional download-integrity checks; it is neither an installer nor a digital signature.
 
 Sign in through Codex using its standard local configuration. One More Prompt discovers existing records; no API key or manual credential copy is needed. The first setup screen offers all nine languages above, with English initially selected. You can change the saved choice in Settings.
 

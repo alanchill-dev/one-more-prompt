@@ -57,7 +57,7 @@ body:
       options:
         - macOS (Apple Silicon)
         - macOS (Intel)
-        - Windows 10/11 (x64 Preview)
+        - Windows 10/11 (x64)
     validations:
       required: true
   - type: textarea
