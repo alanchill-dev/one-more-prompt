@@ -294,7 +294,7 @@ fn run_plugin_function_with_timeout(
             };
             match promise.finish::<Object>() {
                 Ok(obj) => obj,
-                Err(Error::WouldBlock) => {
+                Err(Error::WouldBlock) if !deadline.has_elapsed() => {
                     return error_output(plugin, "probe() returned unresolved promise".to_string());
                 }
                 Err(_) => {
@@ -1073,6 +1073,10 @@ pub fn is_rate_limited_output(output: &PluginOutput) -> bool {
 mod local_history_tests;
 
 #[cfg(test)]
+#[path = "runtime_promise_tests.rs"]
+mod promise_tests;
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::plugin_engine::manifest::{LoadedPlugin, PluginManifest};
@@ -1100,7 +1104,7 @@ mod tests {
     use std::path::PathBuf;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    fn test_plugin(entry_script: &str) -> LoadedPlugin {
+    pub(super) fn test_plugin(entry_script: &str) -> LoadedPlugin {
         LoadedPlugin {
             manifest: PluginManifest {
                 schema_version: 1,
@@ -1122,7 +1126,7 @@ mod tests {
         }
     }
 
-    fn temp_app_dir(label: &str) -> PathBuf {
+    pub(super) fn temp_app_dir(label: &str) -> PathBuf {
         let nanos = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .unwrap_or_default()
@@ -1130,7 +1134,7 @@ mod tests {
         std::env::temp_dir().join(format!("one-more-prompt-test-{}-{}", label, nanos))
     }
 
-    fn error_text(output: PluginOutput) -> String {
+    pub(super) fn error_text(output: PluginOutput) -> String {
         match output.lines.first() {
             Some(MetricLine::Badge { text, .. }) => text.clone(),
             other => panic!("expected error badge, got {:?}", other),
