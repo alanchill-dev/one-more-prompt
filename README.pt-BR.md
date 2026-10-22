@@ -1,4 +1,10 @@
-<p align="center"><img src="public/icon.png" alt="One More Prompt" width="96" height="96"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-light.svg">
+    <img src="assets/brand/logo-light.svg" alt="One More Prompt" width="96" height="96">
+  </picture>
+</p>
 <h1 align="center">One More Prompt</h1>
 <p align="center"><strong>Entenda Seu Uso do Codex e Mantenha o Trabalho à Vista.</strong></p>
 <p align="center"><a href="README.md">English</a> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <strong>Português (Brasil)</strong> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a></p>
@@ -41,6 +47,8 @@ One More Prompt é um aplicativo de desktop que prioriza dados locais para **lim
 - **Windows · x64:** Baixe o ZIP portátil Windows x64 sem assinatura, extraia **a pasta inteira** e execute `one-more-prompt.exe`. Mantenha todos os arquivos juntos.
 
 O Windows precisa do [Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/#download-section). O SmartScreen ou políticas corporativas podem alertar ou bloquear apps sem assinatura. Não há pacotes para Linux, Mac Intel ou Windows ARM nativo.
+
+Para instalar ou executar o app, basta baixar o DMG ou o ZIP. [SHA256SUMS.txt](https://github.com/alanchill-dev/one-more-prompt/releases/download/v1.0.0/SHA256SUMS.txt) contém hashes para a verificação opcional da integridade do download; não é um instalador nem uma assinatura digital.
 
 Entre no Codex com a configuração local padrão. O app encontra os registros existentes sem chave de API nem cópia manual de credenciais. A primeira tela oferece os nove idiomas acima, com inglês selecionado inicialmente. Você pode alterar o idioma salvo em Configurações.
 

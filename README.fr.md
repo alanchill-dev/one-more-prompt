@@ -1,4 +1,10 @@
-<p align="center"><img src="public/icon.png" alt="One More Prompt" width="96" height="96"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-light.svg">
+    <img src="assets/brand/logo-light.svg" alt="One More Prompt" width="96" height="96">
+  </picture>
+</p>
 <h1 align="center">One More Prompt</h1>
 <p align="center"><strong>Comprenez Votre Usage de Codex et Gardez le Fil de Votre Travail.</strong></p>
 <p align="center"><a href="README.md">English</a> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.de.md">Deutsch</a> · <strong>Français</strong></p>
@@ -41,6 +47,8 @@ One More Prompt est une application de bureau privilégiant les données locales
 - **Windows · x64:** Téléchargez le ZIP portable Windows x64 non signé, extrayez **tout le dossier**, puis lancez `one-more-prompt.exe`. Gardez les fichiers associés ensemble.
 
 Windows nécessite [Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/#download-section). SmartScreen ou une politique d’entreprise peut avertir ou bloquer les applications non signées. Aucun paquet Linux, Mac Intel ou Windows ARM natif n’est fourni.
+
+Seul le DMG ou le ZIP est nécessaire pour installer ou lancer l’application. [SHA256SUMS.txt](https://github.com/alanchill-dev/one-more-prompt/releases/download/v1.0.0/SHA256SUMS.txt) contient des empreintes permettant de vérifier, si vous le souhaitez, l’intégrité du téléchargement ; ce n’est ni un programme d’installation ni une signature numérique.
 
 Connectez-vous à Codex avec sa configuration locale standard. Les données existantes sont détectées sans clé API ni copie manuelle des identifiants. Le premier écran propose les neuf langues ci-dessus, avec l’anglais sélectionné initialement. Vous pouvez ensuite modifier la langue enregistrée dans les réglages.
 
