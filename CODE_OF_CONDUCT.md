@@ -36,7 +36,9 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported through GitHub private vulnerability reporting in the repository's **Security** tab. Begin the report title with `Code of Conduct`, and do not include sensitive details in a public issue. If the form is unavailable, conduct that occurs on GitHub may be reported through GitHub's built-in reporting controls.
+Report abusive or harassing behavior on GitHub using **Report content** on the relevant issue, pull request, or comment, or **Block or report** on the user's profile. See [GitHub's reporting instructions](https://docs.github.com/en/communities/maintaining-your-safety-on-github/reporting-abuse-or-spam), including the private GitHub Support contact form.
+
+Reports sent to GitHub Support are handled by GitHub under its policies; they are not private messages to this repository's maintainers. Do not publish personal information or sensitive incident details in a public issue. The repository's private vulnerability form is for software security issues, not conduct reports.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 
