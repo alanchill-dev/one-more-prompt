@@ -3284,7 +3284,7 @@ dependencies = [
  "tauri-winrt-notification",
  "time",
  "uuid",
- "windows 0.61.3",
+ "windows 0.62.2",
  "windows-registry",
  "zstd",
 ]
