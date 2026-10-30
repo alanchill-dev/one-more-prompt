@@ -61,7 +61,7 @@ tauri-plugin-single-instance = "2"
 regex-lite = "0.1.9"
 notify = "8.2.0"
 zstd = { version = "0.14.3", default-features = false }
-aes-gcm = "0.10.3"
+aes-gcm = "0.11.1"
 sha2 = "0.11"
 specta = { version = "=2.0.0-rc.25", features = ["derive"] }
 tauri-specta = { version = "=2.0.0-rc.25", features = ["derive", "typescript"] }
